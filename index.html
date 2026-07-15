@@ -233,4 +233,696 @@
   .btn-outline:hover{transform:translateY(-3px); border-color:var(--c2); text-decoration:none; color:var(--text);}
 
   footer{padding:48px 0 70px; text-align:center; color:var(--text-faint); font-size:0.86rem; position:relative;}
-  footer::before{content:''; display:block; width:100px; height:3px; margin:0 auto 30p
+  footer::before{content:''; display:block; width:100px; height:3px; margin:0 auto 30px; background:var(--gradient); border-radius:2px;}
+  footer a{color:var(--text-dim);}
+  footer a:hover{color:var(--c1);}
+
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg);}
+  ::-webkit-scrollbar-thumb{background:var(--c2); border-radius:6px;}
+
+  @media print{ nav, .progress-bar, .bg-scene{display:none;} body{background:#fff; color:#111;} }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="bg-scene">
+  <canvas id="netCanvas"></canvas>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+  <div class="grid-overlay"></div>
+  <div class="grain"></div>
+</div>
+
+<nav>
+  <div class="container">
+    <div class="logo">
+      <svg class="logo-chip" viewBox="0 0 40 40" fill="none">
+        <defs><linearGradient id="chipGrad" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#00e5c7"/><stop offset="50%" stop-color="#5b8dff"/><stop offset="100%" stop-color="#a26bff"/></linearGradient></defs>
+        <g class="chip-glow">
+          <rect x="11" y="11" width="18" height="18" rx="3" stroke="url(#chipGrad)" stroke-width="2"/>
+          <rect x="16" y="16" width="8" height="8" rx="1.5" fill="url(#chipGrad)"/>
+          <path d="M20 4v6M20 30v6M4 20h6M30 20h6M8 8l4 4M32 32l-4-4M8 32l4-4M32 8l-4 4" stroke="url(#chipGrad)" stroke-width="1.6" stroke-linecap="round"/>
+        </g>
+      </svg>
+      Nidhin Kumar K N
+    </div>
+    <ul class="navlinks">
+      <li><a href="#summary" class="navlink">Summary</a></li>
+      <li><a href="#skills" class="navlink">Skills</a></li>
+      <li><a href="#experience" class="navlink">Experience</a></li>
+      <li><a href="#education" class="navlink">Education</a></li>
+      <li><a href="#certifications" class="navlink">Certifications</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero container">
+  <div class="hero-grid">
+    <div class="emblem-wrap">
+      <div class="emblem-ring r3"></div>
+      <div class="emblem-ring r2"></div>
+      <div class="emblem-ring"></div>
+      <div class="emblem-core">
+        <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+          <g stroke="rgba(0,229,199,0.35)" stroke-width="1" fill="none">
+            <path d="M100 20 L100 60"/><path d="M100 140 L100 180"/>
+            <path d="M20 100 L60 100"/><path d="M140 100 L180 100"/>
+            <path d="M45 45 L75 75"/><path d="M125 125 L155 155"/>
+            <path d="M155 45 L125 75"/><path d="M75 125 L45 155"/>
+            <circle cx="100" cy="100" r="70" stroke-dasharray="4 6"/>
+            <circle cx="100" cy="100" r="88" stroke="rgba(91,141,255,0.2)" stroke-dasharray="2 8"/>
+          </g>
+          <g fill="var(--c1)">
+            <circle cx="100" cy="20" r="3"/><circle cx="100" cy="180" r="3" fill="var(--c4)"/>
+            <circle cx="20" cy="100" r="3" fill="var(--c3)"/><circle cx="180" cy="100" r="3" fill="var(--c2)"/>
+          </g>
+        </svg>
+        <img class="emblem-photo" src="photo_square.jpg" alt="Nidhin Kumar K N">
+      </div>
+      <div class="emblem-node n1"></div>
+      <div class="emblem-node n2"></div>
+      <div class="emblem-node n3"></div>
+      <div class="emblem-node n4"></div>
+    </div>
+
+    <div>
+      <div class="eyebrow"><span class="live-dot"></span> Available for architecture &amp; advisory engagements</div>
+      <h1 class="name">Nidhin Kumar K N</h1>
+      <div class="role"><span id="typedRole" class="typed"></span></div>
+
+      <div class="contact-row">
+        <div class="contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          Kochi, India
+        </div>
+        <div class="contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <a href="tel:+918606365068">+91-8606365068</a>
+        </div>
+        <div class="contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4Z"/><path d="m22 6-10 7L2 6"/></svg>
+          <a href="mailto:nidhinkn280@gmail.com">nidhinkn280@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <a href="https://linkedin.com/in/nidhin-kumar-a6706342" target="_blank" rel="noopener">linkedin.com/in/nidhin-kumar-a6706342</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ring-row">
+    <div class="ring-card reveal">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="97" style="stroke:var(--c1)"/></svg>
+        <div class="ring-center"><span class="ring-num" style="color:var(--c1)">17+</span></div>
+      </div>
+      <div class="ring-label">Years of experience</div>
+    </div>
+    <div class="ring-card reveal">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="100" style="stroke:var(--c2)"/></svg>
+        <div class="ring-center"><span class="ring-num" style="color:var(--c2)">3</span></div>
+      </div>
+      <div class="ring-label">Cloud platforms mastered</div>
+    </div>
+    <div class="ring-card reveal">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="94" style="stroke:var(--c3)"/></svg>
+        <div class="ring-center"><span class="ring-num" style="color:var(--c3)">100+</span></div>
+      </div>
+      <div class="ring-label">AI agents architected</div>
+    </div>
+    <div class="ring-card reveal">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="88" style="stroke:var(--c4)"/></svg>
+        <div class="ring-center"><span class="ring-num" style="color:var(--c4)">6</span></div>
+      </div>
+      <div class="ring-label">Professional certifications</div>
+    </div>
+  </div>
+</header>
+
+<div class="marquee-shell">
+  <div class="container" style="padding:0;">
+    <div class="marquee-track">
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>AWS</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Azure</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>GCP</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>Agentic AI</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>RAG</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>MCP</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Kubernetes</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Terraform</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>Zero Trust</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>ArgoCD</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>Kafka</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>Databricks</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Datadog</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Dynatrace</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>AWS</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Azure</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>GCP</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>Agentic AI</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>RAG</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>MCP</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Kubernetes</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Terraform</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>Zero Trust</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>ArgoCD</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>Kafka</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>Databricks</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Datadog</span>
+      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Dynatrace</span>
+    </div>
+  </div>
+</div>
+
+<section id="highlights">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Why work with me</div>
+      <h2 class="section-title">Built for enterprise-grade, AI-first delivery</h2>
+    </div>
+    <div class="highlights-grid">
+      <div class="highlight-card hl1 reveal">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.9 7.4 10.4 16M16.1 7.4 13.6 16M8.4 6h7.2"/></svg></div>
+        <h4>Agentic AI &amp; RAG Systems</h4>
+        <p>Multi-agent ecosystems, RAG pipelines, and MCP-based orchestration designed for production scale and governance.</p>
+      </div>
+      <div class="highlight-card hl2 reveal">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H6a4 4 0 1 1 .68-7.94A5.5 5.5 0 0 1 17 9.5a4 4 0 0 1 .5 9.5Z"/></svg></div>
+        <h4>Multi-Cloud Architecture</h4>
+        <p>Secure, well-governed landing zones and migrations across AWS, Azure, and GCP for mission-critical workloads.</p>
+      </div>
+      <div class="highlight-card hl3 reveal">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3Z"/><path d="m9.2 12 1.9 1.9L15 10"/></svg></div>
+        <h4>Zero-Trust DevSecOps</h4>
+        <p>Security-first CI/CD, policy-as-code, and AI DevSecOps embedded into every pipeline and deployment.</p>
+      </div>
+      <div class="highlight-card hl4 reveal">
+        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5 7L13 5l2.5 7H22"/></svg></div>
+        <h4>Reliability at Scale</h4>
+        <p>Observability-driven operations across Dynatrace, Datadog, and OpenTelemetry, holding the line on strict SLAs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dashboard">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Snapshot</div>
+      <h2 class="section-title">Career Dashboard</h2>
+    </div>
+    <div class="dash-grid">
+      <div class="panel reveal">
+        <h3><span class="dotcolor"></span> Skill Distribution</h3>
+        <div class="panel-sub">Tools &amp; capabilities mapped per competency area</div>
+        <div class="bar-row"><div class="bar-label">AI/ML &amp; Agentic AI</div><div class="bar-track"><div class="bar-fill" data-w="100" style="--bc:var(--c3)"></div></div><div class="bar-val">10</div></div>
+        <div class="bar-row"><div class="bar-label">Security</div><div class="bar-track"><div class="bar-fill" data-w="90" style="--bc:var(--c4)"></div></div><div class="bar-val">9</div></div>
+        <div class="bar-row"><div class="bar-label">Cloud &amp; IoT</div><div class="bar-track"><div class="bar-fill" data-w="70" style="--bc:var(--c1)"></div></div><div class="bar-val">7</div></div>
+        <div class="bar-row"><div class="bar-label">Observability</div><div class="bar-track"><div class="bar-fill" data-w="60" style="--bc:var(--c6)"></div></div><div class="bar-val">6</div></div>
+        <div class="bar-row"><div class="bar-label">DevOps</div><div class="bar-track"><div class="bar-fill" data-w="50" style="--bc:var(--c2)"></div></div><div class="bar-val">5</div></div>
+        <div class="bar-row"><div class="bar-label">IaC &amp; Automation</div><div class="bar-track"><div class="bar-fill" data-w="50" style="--bc:var(--c5)"></div></div><div class="bar-val">5</div></div>
+      </div>
+
+      <div class="panel reveal">
+        <h3><span class="dotcolor"></span> Tenure by Organization</h3>
+        <div class="panel-sub">Years of ownership across each engagement</div>
+        <div class="tenure-row"><div class="tenure-label">Quest Global</div><div class="tenure-track"><div class="tenure-fill ongoing" data-w="10" style="--bc:var(--c1)"></div></div><div class="tenure-val">Present</div></div>
+        <div class="tenure-row"><div class="tenure-label">Sasken Technologies</div><div class="tenure-track"><div class="tenure-fill" data-w="43" style="--bc:var(--c2)"></div></div><div class="tenure-val">~1.7 yrs</div></div>
+        <div class="tenure-row"><div class="tenure-label">EPAM Systems</div><div class="tenure-track"><div class="tenure-fill" data-w="60" style="--bc:var(--c3)"></div></div><div class="tenure-val">~2.4 yrs</div></div>
+        <div class="tenure-row"><div class="tenure-label">ULTS Pvt. Ltd.</div><div class="tenure-track"><div class="tenure-fill" data-w="50" style="--bc:var(--c4)"></div></div><div class="tenure-val">~2 yrs</div></div>
+        <div class="tenure-row"><div class="tenure-label">RST Technologies</div><div class="tenure-track"><div class="tenure-fill" data-w="75" style="--bc:var(--c5)"></div></div><div class="tenure-val">~3 yrs</div></div>
+        <div class="tenure-row"><div class="tenure-label">Khayber Fire &amp; Security</div><div class="tenure-track"><div class="tenure-fill" data-w="100" style="--bc:var(--c6)"></div></div><div class="tenure-val">~4 yrs</div></div>
+        <div class="tenure-row"><div class="tenure-label">GEMS Pvt. Ltd.</div><div class="tenure-track"><div class="tenure-fill" data-w="75" style="--bc:var(--c1)"></div></div><div class="tenure-val">~3 yrs</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Profile</div>
+      <h2 class="section-title">Summary</h2>
+    </div>
+    <div class="summary-card reveal">
+      <p class="summary-text">
+        Cloud, DevOps, and AI Architect with 17+ years of experience delivering enterprise-scale architectures across AWS and Azure, and driving AI-driven transformations. Strong background in enterprise cloud architecture, large-scale migrations, platform engineering, and multi-agent AI ecosystems. Experienced in designing secure landing zones, microservices, AI DevSecOps pipelines, and comprehensive multi-agent systems utilizing RAG and Agentic AI. Known for balancing architecture ownership, people management, and hands-on technical involvement, with a strong focus on reliability, Zero Trust Security, and Agentic AI innovation to drive business value.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Expertise</div>
+      <h2 class="section-title">Core Competencies</h2>
+    </div>
+    <div class="comp-grid">
+      <div class="comp-card cc1 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H6a4 4 0 1 1 .68-7.94A5.5 5.5 0 0 1 17 9.5a4 4 0 0 1 .5 9.5Z"/></svg></span> Cloud &amp; IoT</h3>
+        <div class="tags">
+          <span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">GCP</span>
+          <span class="tag">Hybrid Strategy</span><span class="tag">Landing Zones</span>
+          <span class="tag">IoT Architecture</span><span class="tag">Automotive Cloud</span>
+        </div>
+      </div>
+      <div class="comp-card cc2 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.9 7.4 10.4 16M16.1 7.4 13.6 16M8.4 6h7.2"/></svg></span> AI / ML &amp; Agentic AI</h3>
+        <div class="tags">
+          <span class="tag">RAG</span><span class="tag">MCP</span><span class="tag">AWS Bedrock</span>
+          <span class="tag">Azure OpenAI</span><span class="tag">Vertex AI</span><span class="tag">Multi-Agent Systems</span>
+          <span class="tag">MongoDB</span><span class="tag">Gen AI</span><span class="tag">Databricks</span><span class="tag">Kafka</span>
+        </div>
+      </div>
+      <div class="comp-card cc3 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></span> DevOps</h3>
+        <div class="tags">
+          <span class="tag">Kubernetes (EKS/AKS/GKE)</span><span class="tag">Docker</span>
+          <span class="tag">Helm</span><span class="tag">GitOps</span><span class="tag">Platform Engineering</span>
+        </div>
+      </div>
+      <div class="comp-card cc4 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.6"/><path d="M19.2 13.3a1.5 1.5 0 0 0 .3 1.66l.05.05a1.83 1.83 0 1 1-2.58 2.58l-.05-.05a1.5 1.5 0 0 0-1.66-.3 1.5 1.5 0 0 0-.9 1.37V19a1.83 1.83 0 0 1-3.66 0v-.08a1.5 1.5 0 0 0-.98-1.38 1.5 1.5 0 0 0-1.66.3l-.05.05a1.83 1.83 0 1 1-2.59-2.58l.05-.05a1.5 1.5 0 0 0 .3-1.66 1.5 1.5 0 0 0-1.37-.9H4a1.83 1.83 0 0 1 0-3.66h.08a1.5 1.5 0 0 0 1.38-.98 1.5 1.5 0 0 0-.3-1.66l-.05-.05a1.83 1.83 0 1 1 2.58-2.59l.05.05a1.5 1.5 0 0 0 1.66.3H9.5a1.5 1.5 0 0 0 .9-1.37V4a1.83 1.83 0 0 1 3.66 0v.08a1.5 1.5 0 0 0 .9 1.37 1.5 1.5 0 0 0 1.66-.3l.05-.05a1.83 1.83 0 1 1 2.58 2.58l-.05.05a1.5 1.5 0 0 0-.3 1.66v.1a1.5 1.5 0 0 0 1.37.9H20a1.83 1.83 0 0 1 0 3.66h-.08a1.5 1.5 0 0 0-1.37.9Z"/></svg></span> IaC &amp; Automation</h3>
+        <div class="tags">
+          <span class="tag">Terraform</span><span class="tag">Ansible</span><span class="tag">Python</span>
+          <span class="tag">Java (Basics)</span><span class="tag">Shell Scripting</span>
+        </div>
+      </div>
+      <div class="comp-card cc5 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3Z"/><path d="m9.2 12 1.9 1.9L15 10"/></svg></span> Security</h3>
+        <div class="tags">
+          <span class="tag">AI DevSecOps</span><span class="tag">CI/CD</span><span class="tag">GitHub Actions</span>
+          <span class="tag">GitLab CI</span><span class="tag">ArgoCD</span><span class="tag">Zero Trust</span>
+          <span class="tag">IAM</span><span class="tag">Policy as Code</span><span class="tag">Responsible AI</span>
+        </div>
+      </div>
+      <div class="comp-card cc6 reveal">
+        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5 7L13 5l2.5 7H22"/></svg></span> Observability</h3>
+        <div class="tags">
+          <span class="tag">Dynatrace</span><span class="tag">Datadog</span><span class="tag">Prometheus</span>
+          <span class="tag">Grafana</span><span class="tag">OpenTelemetry</span><span class="tag">ELK Stack</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Career</div>
+      <h2 class="section-title">Experience</h2>
+    </div>
+    <div class="timeline">
+
+      <div class="tl-item current reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">AI Technical Manager</span> · <span class="tl-company">Quest Global</span></div>
+            <div class="tl-date">Mar 2026 — Present</div>
+          </div>
+          <div class="tl-loc">Bangalore, India</div>
+          <ul class="tl-list">
+            <li>Designed the overall AI platform architecture utilizing RAG, MCP, and Agentic AI, selecting optimal AI services including Amazon Bedrock, Azure AI, and Vertex AI to ensure a scalable, secure, and production-ready ecosystem.</li>
+            <li>Led the implementation of multi-agent systems featuring 100+ specialized AI agents for incident management, Jira automation, knowledge retrieval, and customer support, defining agent communication, workflows, and governance standards.</li>
+            <li>Managed cross-functional teams comprising AI Engineers, MLOps Engineers, Cloud Architects, and DevOps professionals, coordinating sprint planning, technical reviews, risk mitigation, and stakeholder communication for on-time delivery.</li>
+            <li>Established comprehensive observability using Datadog, Dynatrace, OpenTelemetry, Prometheus, and Grafana to monitor model accuracy, latency, token consumption, infrastructure health, and business KPIs, maintaining strict SLA compliance.</li>
+            <li>Defined AI security, compliance, audit logging, and responsible AI practices, collaborating with business stakeholders to align solutions with business goals, drive AI adoption, and control costs, risks, and operational complexity.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">Senior Cloud &amp; DevOps Architect / Technical Manager</span> · <span class="tl-company">Sasken Technologies</span></div>
+            <div class="tl-date">Jun 2024 — Feb 2026</div>
+          </div>
+          <div class="tl-loc">Bangalore, India</div>
+          <ul class="tl-list">
+            <li>Led enterprise cloud architecture and DevOps strategy across AWS, Azure, and IoT environments.</li>
+            <li>Architected AI/ML, Gen AI, and Agentic AI solutions for Automotive industry use cases.</li>
+            <li>Designed secure cloud landing zones with network segmentation, IAM standards, and governance controls.</li>
+            <li>Drove large-scale cloud migration and modernization initiatives for frontend and backend applications.</li>
+            <li>Architected microservices and event-driven platforms using Kubernetes and cloud-native services.</li>
+            <li>Managed and mentored DevOps and platform teams, supporting delivery planning and skill development.</li>
+            <li>Implemented AI DevSecOps practices integrating security scanning, policy enforcement, and Zero Trust.</li>
+            <li>Drove cloud cost optimization initiatives through autoscaling, right-sizing, and governance practices.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">Cloud &amp; DevOps Architect (Lead)</span> · <span class="tl-company">EPAM Systems</span></div>
+            <div class="tl-date">Dec 2021 — May 2024</div>
+          </div>
+          <div class="tl-loc">Bangalore, India</div>
+          <ul class="tl-list">
+            <li>Led enterprise cloud migration programs across AWS and Azure.</li>
+            <li>Designed Kubernetes-based microservices and event-driven architectures supporting frontend and backend services.</li>
+            <li>Defined CI/CD, Infrastructure as Code, and DevSecOps standards adopted across multiple teams.</li>
+            <li>Supported data platforms and databases including MongoDB and Databricks for analytics and processing workloads.</li>
+            <li>Integrated observability using Dynatrace, Datadog, and ELK for production platforms.</li>
+            <li>Collaborated with security, application, and product teams to align architecture with business requirements.</li>
+            <li>Improved availability, scalability, and security through proactive monitoring and automation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">Solution Architect</span> · <span class="tl-company">ULTS Pvt. Ltd.</span></div>
+            <div class="tl-date">2019 — 2021</div>
+          </div>
+          <div class="tl-loc">Kozhikode, India</div>
+          <ul class="tl-list">
+            <li>Designed cloud architectures and CI/CD pipelines for enterprise and government projects.</li>
+            <li>Led Docker and Kubernetes adoption to standardize deployment workflows.</li>
+            <li>Automated environment provisioning and configuration management using Terraform and Ansible.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">IT Project Manager / Cloud Architect</span> · <span class="tl-company">RST Technologies</span></div>
+            <div class="tl-date">2016 — 2019</div>
+          </div>
+          <div class="tl-loc">Bangalore, India</div>
+          <ul class="tl-list">
+            <li>Led cloud migration initiatives to AWS for mission-critical workloads.</li>
+            <li>Introduced CI/CD practices and version control to improve release reliability.</li>
+            <li>Managed hybrid infrastructure operations with ownership of uptime and SLA commitments.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">Infrastructure Support Manager</span> · <span class="tl-company">Khayber Fire &amp; Security</span></div>
+            <div class="tl-date">2012 — 2016</div>
+          </div>
+          <div class="tl-loc">Bahrain</div>
+          <ul class="tl-list">
+            <li>Managed servers, storage, and network infrastructure for large-scale security systems.</li>
+            <li>Supported virtualization and infrastructure consolidation initiatives to improve efficiency.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tl-item reveal">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <div><span class="tl-role">Network Administrator</span> · <span class="tl-company">GEMS Pvt. Ltd.</span></div>
+            <div class="tl-date">2009 — 2012</div>
+          </div>
+          <ul class="tl-list">
+            <li>Administered Linux and Windows server environments.</li>
+            <li>Supported daily IT operations and basic automation tasks.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="kicker">Background</div>
+      <h2 class="section-title">Education, Certifications &amp; Languages</h2>
+    </div>
+    <div class="grid-2">
+      <div>
+        <div class="info-card reveal" style="margin-bottom:22px;">
+          <h3>Education</h3>
+          <div class="edu-item">
+            <div><div class="edu-degree">MBA in Project Management</div><div class="edu-school">ISBM</div></div>
+            <div class="edu-year">2017</div>
+          </div>
+          <div class="edu-item">
+            <div><div class="edu-degree">Bachelor of Computer Applications (BCA)</div><div class="edu-school">CV Raman University</div></div>
+            <div class="edu-year">2014</div>
+          </div>
+        </div>
+
+        <div class="info-card reveal">
+          <h3>Languages</h3>
+          <div class="lang-grid">
+            <div class="lang-item">
+              <div class="lang-ring-wrap">
+                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="100" style="stroke:var(--c1)"/></svg>
+                <div class="lang-center">C2</div>
+              </div>
+              <div class="lang-name">English</div>
+            </div>
+            <div class="lang-item">
+              <div class="lang-ring-wrap">
+                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="100" style="stroke:var(--c3)"/></svg>
+                <div class="lang-center">C2</div>
+              </div>
+              <div class="lang-name">Malayalam</div>
+            </div>
+            <div class="lang-item">
+              <div class="lang-ring-wrap">
+                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="80" style="stroke:var(--c2)"/></svg>
+                <div class="lang-center">C1</div>
+              </div>
+              <div class="lang-name">Hindi</div>
+            </div>
+            <div class="lang-item">
+              <div class="lang-ring-wrap">
+                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="60" style="stroke:var(--c5)"/></svg>
+                <div class="lang-center">B2</div>
+              </div>
+              <div class="lang-name">Tamil</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card reveal">
+        <h3 id="certifications">Certifications</h3>
+        <div class="cert-group">
+          <h4>AI / ML</h4>
+          <div class="cert-item"><span>Scaler — Advanced AI/ML Certification</span></div>
+          <div class="cert-item"><span>GCP Professional Machine Learning Engineer</span><span class="yr">2025</span></div>
+        </div>
+        <div class="cert-group">
+          <h4>Management</h4>
+          <div class="cert-item"><span>Project Management Professional (PMP)</span><span class="yr">2025</span></div>
+        </div>
+        <div class="cert-group">
+          <h4>Cloud</h4>
+          <div class="cert-item"><span>AWS Certified Solutions Architect – Associate</span><span class="yr">2024</span></div>
+          <div class="cert-item"><span>AWS AI Cloud Practitioner</span><span class="yr">2025</span></div>
+          <div class="cert-item"><span>Azure Administrator (AZ-104)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact-cta">
+  <div class="container">
+    <div class="cta-panel reveal">
+      <div class="kicker" style="margin-bottom:14px;">Let's talk</div>
+      <h2>Let's build something intelligent together</h2>
+      <p>Open to architecture leadership, AI transformation, and advisory engagements across cloud, DevOps, and Agentic AI. Reach out and let's discuss how to move your platform forward.</p>
+      <div class="cta-buttons">
+        <a class="btn btn-primary" href="mailto:nidhinkn280@gmail.com">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4Z"/><path d="m22 6-10 7L2 6"/></svg>
+          Email Me
+        </a>
+        <a class="btn btn-outline" href="https://linkedin.com/in/nidhin-kumar-a6706342" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          Connect on LinkedIn
+        </a>
+        <a class="btn btn-outline" href="tel:+918606365068">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          Call
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Nidhin Kumar K N &middot; Cloud, DevOps &amp; AI Architect &middot;
+    <a href="mailto:nidhinkn280@gmail.com">nidhinkn280@gmail.com</a> &middot;
+    <a href="tel:+918606365068">+91-8606365068</a>
+  </div>
+</footer>
+
+<script>
+  // Network canvas background
+  const canvas = document.getElementById('netCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, points;
+  const colors = ['0,229,199', '91,141,255', '162,107,255', '255,93,162', '56,199,255'];
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
+  }
+  function initPoints(){
+    const count = Math.min(70, Math.floor((w*h)/26000));
+    points = Array.from({length: count}, () => ({
+      x: Math.random()*w, y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.35, vy: (Math.random()-0.5)*0.35,
+      c: colors[Math.floor(Math.random()*colors.length)]
+    }));
+  }
+  function step(){
+    ctx.clearRect(0,0,w,h);
+    for(const p of points){
+      p.x += p.vx; p.y += p.vy;
+      if(p.x < 0 || p.x > w) p.vx *= -1;
+      if(p.y < 0 || p.y > h) p.vy *= -1;
+    }
+    for(let i=0;i<points.length;i++){
+      for(let j=i+1;j<points.length;j++){
+        const a = points[i], b = points[j];
+        const dx = a.x-b.x, dy = a.y-b.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < 150){
+          ctx.strokeStyle = `rgba(${a.c},${0.12*(1-dist/150)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    for(const p of points){
+      ctx.fillStyle = `rgba(${p.c},0.7)`;
+      ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2); ctx.fill();
+    }
+    requestAnimationFrame(step);
+  }
+  resize(); initPoints(); step();
+  window.addEventListener('resize', () => { resize(); initPoints(); });
+
+  // Scroll progress bar
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = (doc.scrollTop) / (doc.scrollHeight - doc.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  });
+
+  // Typing effect
+  const roles = [
+    'Cloud, DevOps & AI Architect',
+    'Technical Manager',
+    'Agentic AI & RAG Systems Lead',
+    'Enterprise Cloud Strategist'
+  ];
+  const typedEl = document.getElementById('typedRole');
+  let ri = 0, ci = 0, deleting = false;
+  function typeLoop(){
+    const current = roles[ri];
+    if(!deleting){
+      ci++; typedEl.textContent = current.slice(0, ci);
+      if(ci === current.length){ deleting = true; setTimeout(typeLoop, 1500); return; }
+    } else {
+      ci--; typedEl.textContent = current.slice(0, ci);
+      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
+    }
+    setTimeout(typeLoop, deleting ? 35 : 60);
+  }
+  typeLoop();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Ring progress (hero stats)
+  const ringIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const circle = entry.target;
+        const pct = parseFloat(circle.getAttribute('data-percent'));
+        const c = 2 * Math.PI * 45;
+        circle.style.strokeDashoffset = c - (pct/100)*c;
+        ringIO.unobserve(circle);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.ring-fg').forEach(el => ringIO.observe(el));
+
+  // Language proficiency rings
+  const langIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const circle = entry.target;
+        const pct = parseFloat(circle.getAttribute('data-percent'));
+        const c = 2 * Math.PI * 27;
+        circle.style.strokeDashoffset = c - (pct/100)*c;
+        langIO.unobserve(circle);
+      }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.lang-fg').forEach(el => langIO.observe(el));
+
+  // Bar / tenure fills
+  const barIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const el = entry.target;
+        el.style.width = el.getAttribute('data-w') + '%';
+        barIO.unobserve(el);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.bar-fill, .tenure-fill').forEach(el => barIO.observe(el));
+
+  // Mouse-tracked spotlight glow on cards
+  document.querySelectorAll('.comp-card, .highlight-card, .tl-card, .info-card, .panel').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--sx', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--sy', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // Active nav link on scroll
+  const navlinks = document.querySelectorAll('.navlink');
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.getAttribute('id');
+      if(!id) return;
+      const link = document.querySelector('.navlink[href="#' + id + '"]');
+      if(entry.isIntersecting && link){
+        navlinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+  document.querySelectorAll('section[id]').forEach(s => navIO.observe(s));
+</script>
+
+</body>
+</html>
