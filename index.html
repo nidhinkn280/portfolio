@@ -1,928 +1,1095 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nidhin Kumar K N — Cloud, DevOps & AI Architect</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#060911; --bg-alt:#0b0f19; --card:rgba(255,255,255,0.045); --border:rgba(255,255,255,0.09);
-    --text:#eef2fa; --text-dim:#9aa5bd; --text-faint:#606a82;
-    --c1:#00e5c7; --c2:#5b8dff; --c3:#a26bff; --c4:#ff5da2; --c5:#ffb347; --c6:#38c7ff;
-    --gradient: linear-gradient(120deg, var(--c1), var(--c2) 45%, var(--c3) 75%, var(--c4));
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth;}
-  ::selection{background:var(--c3); color:#060911;}
-  body{background:var(--bg); color:var(--text); font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height:1.65; -webkit-font-smoothing:antialiased; overflow-x:hidden; position:relative;}
-  h1,h2,h3,h4{font-family:'Space Grotesk', 'Inter', sans-serif; font-weight:600; letter-spacing:-0.01em;}
-  .mono{font-family:'JetBrains Mono', monospace;}
-  a{color:var(--c1); text-decoration:none; transition:color .2s;}
-  a:hover{color:var(--c2);}
-  .container{max-width:1140px; margin:0 auto; padding:0 28px; position:relative; z-index:2;}
-
-  .progress-bar{position:fixed; top:0; left:0; height:3px; width:0%; background:var(--gradient); z-index:100; box-shadow:0 0 12px rgba(0,229,199,0.6);}
-
-  .bg-scene{position:fixed; inset:0; z-index:0; overflow:hidden; background:var(--bg);}
-  #netCanvas{position:absolute; inset:0; opacity:0.55;}
-  .blob{position:absolute; border-radius:50%; filter:blur(80px); opacity:0.28; will-change:transform;}
-  .blob1{width:520px; height:520px; background:radial-gradient(circle, var(--c1), transparent 65%); top:-160px; left:-120px; animation:float1 18s ease-in-out infinite;}
-  .blob2{width:480px; height:480px; background:radial-gradient(circle, var(--c3), transparent 65%); top:15%; right:-180px; animation:float2 22s ease-in-out infinite;}
-  .blob3{width:420px; height:420px; background:radial-gradient(circle, var(--c4), transparent 65%); bottom:-140px; left:20%; animation:float3 20s ease-in-out infinite;}
-  @keyframes float1{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(60px,80px) scale(1.15);}}
-  @keyframes float2{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-70px,50px) scale(0.9);}}
-  @keyframes float3{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(40px,-60px) scale(1.1);}}
-  .grid-overlay{position:absolute; inset:0; background-image:linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size:44px 44px; mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);}
-  .grain{position:absolute; inset:-100px; opacity:0.035; mix-blend-mode:overlay; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-
-  nav{position:sticky; top:0; z-index:50; background:rgba(6,9,17,0.72); backdrop-filter:blur(14px) saturate(160%); border-bottom:1px solid var(--border);}
-  nav .container{display:flex; align-items:center; justify-content:space-between; height:68px;}
-  .logo{font-family:'Space Grotesk'; font-weight:700; font-size:1.05rem; color:var(--text); display:flex; align-items:center; gap:10px;}
-  .logo-chip{width:30px; height:30px; flex-shrink:0;}
-  .logo-chip .chip-glow{filter:drop-shadow(0 0 5px rgba(0,229,199,0.6));}
-  .navlinks{display:flex; gap:4px; list-style:none; background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:5px; border-radius:999px;}
-  .navlinks a{color:var(--text-dim); font-size:0.85rem; font-weight:600; padding:8px 16px; border-radius:999px; transition:all .25s; display:inline-block;}
-  .navlinks a:hover{color:var(--text);}
-  .navlinks a.active{color:#060911; background:var(--gradient); box-shadow:0 0 18px rgba(0,229,199,0.35);}
-  @media (max-width:820px){ .navlinks{display:none;} }
-  @keyframes pulse{0%,100%{opacity:1; transform:scale(1);} 50%{opacity:0.6; transform:scale(1.3);}}
-
-  header.hero{padding:80px 0 40px; position:relative;}
-  .hero-grid{display:grid; grid-template-columns:260px 1fr; gap:56px; align-items:center;}
-  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr; text-align:center;} .emblem-wrap{margin:0 auto;} }
-
-  .emblem-wrap{position:relative; width:230px; height:230px;}
-  .emblem-ring{position:absolute; inset:0; border-radius:50%; border:1px solid rgba(255,255,255,0.08);}
-  .emblem-ring.r2{inset:-18px; border-style:dashed; border-color:rgba(91,141,255,0.25); animation:spin 40s linear infinite;}
-  .emblem-ring.r3{inset:-36px; border-color:rgba(0,229,199,0.12); animation:spin 60s linear infinite reverse;}
-  @keyframes spin{from{transform:rotate(0deg);} to{transform:rotate(360deg);}}
-  .emblem-core{position:absolute; inset:14px; border-radius:50%; background:radial-gradient(circle at 35% 30%, rgba(0,229,199,0.18), rgba(91,141,255,0.10) 40%, rgba(6,9,17,0.9) 75%); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; box-shadow:0 0 50px rgba(0,229,199,0.15), inset 0 0 40px rgba(0,0,0,0.4); overflow:hidden;}
-  .emblem-core svg{width:100%; height:100%; position:absolute; inset:0; opacity:0.55; z-index:1;}
-  .emblem-photo{position:relative; z-index:2; width:88%; height:88%; border-radius:50%; object-fit:cover; object-position:center 18%; box-shadow:0 0 0 2px rgba(255,255,255,0.06);}
-  .emblem-node{position:absolute; width:7px; height:7px; border-radius:50%; background:var(--c1); box-shadow:0 0 8px var(--c1); animation:pulse 2.4s ease-in-out infinite;}
-  .n1{top:6%; left:18%;} .n2{top:70%; left:4%; animation-delay:.4s; background:var(--c3); box-shadow:0 0 8px var(--c3);}
-  .n3{top:14%; right:8%; animation-delay:.8s; background:var(--c4); box-shadow:0 0 8px var(--c4);}
-  .n4{bottom:8%; right:14%; animation-delay:1.2s; background:var(--c2); box-shadow:0 0 8px var(--c2);}
-
-  .eyebrow{display:inline-flex; align-items:center; gap:9px; color:var(--c1); font-size:0.76rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; border:1px solid rgba(0,229,199,0.35); background:rgba(0,229,199,0.07); padding:7px 16px; border-radius:999px; margin-bottom:22px; animation:fadeUp .7s ease both;}
-  .eyebrow .live-dot{width:7px; height:7px; border-radius:50%; background:var(--c1); box-shadow:0 0 8px var(--c1); animation:pulse 1.6s ease-in-out infinite;}
-  h1.name{font-size:clamp(2.2rem, 5.4vw, 3.2rem); line-height:1.06; margin-bottom:14px; background:var(--gradient); background-size:300% 300%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:fadeUp .8s ease .05s both, shimmer 8s ease infinite;}
-  @keyframes shimmer{0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;}}
-  @keyframes fadeUp{from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);}}
-  .role{font-size:1.2rem; color:var(--text-dim); font-weight:500; margin-bottom:24px; min-height:1.6em; animation:fadeUp .8s ease .12s both;}
-  .role .typed{color:var(--text); font-weight:700; border-right:2px solid var(--c1); padding-right:4px;}
-  .contact-row{display:flex; flex-wrap:wrap; gap:12px 14px; margin-bottom:8px; animation:fadeUp .8s ease .18s both;}
-  @media (max-width:860px){ .contact-row{justify-content:center;} }
-  .contact-item{display:flex; align-items:center; gap:8px; color:var(--text-dim); font-size:0.86rem; background:var(--card); border:1px solid var(--border); padding:9px 15px; border-radius:10px; transition:transform .2s, border-color .2s, background .2s;}
-  .contact-item:hover{transform:translateY(-3px); border-color:var(--c1); background:rgba(0,229,199,0.06);}
-  .contact-item svg{flex-shrink:0; color:var(--c1);}
-  .contact-item a{color:var(--text-dim);}
-  .contact-item a:hover{color:var(--c1);}
-
-  .ring-row{display:flex; flex-wrap:wrap; gap:22px; padding:36px 0 8px;}
-  @media (max-width:860px){ .ring-row{justify-content:center;} }
-  .ring-card{display:flex; flex-direction:column; align-items:center; gap:10px;}
-  .ring-wrap{position:relative; width:104px; height:104px;}
-  .ring-wrap svg{width:100%; height:100%; transform:rotate(-90deg);}
-  .ring-wrap circle{fill:none; stroke-width:9;}
-  .ring-bg{stroke:rgba(255,255,255,0.06);}
-  .ring-fg{stroke-linecap:round; stroke-dasharray:282.7; stroke-dashoffset:282.7; transition:stroke-dashoffset 1.6s cubic-bezier(.16,1,.3,1);}
-  .ring-center{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column;}
-  .ring-num{font-family:'Space Grotesk'; font-weight:700; font-size:1.3rem;}
-  .ring-label{font-size:0.78rem; color:var(--text-dim); text-align:center; max-width:120px;}
-
-  .marquee-shell{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.05), rgba(255,255,255,0.02)); padding:22px 0; overflow:hidden; position:relative;}
-  .marquee-shell::before, .marquee-shell::after{content:''; position:absolute; top:0; bottom:0; width:120px; z-index:2;}
-  .marquee-shell::before{left:0; background:linear-gradient(90deg, var(--bg), transparent);}
-  .marquee-shell::after{right:0; background:linear-gradient(270deg, var(--bg), transparent);}
-  .marquee-track{display:flex; width:max-content; gap:0; animation:marquee 32s linear infinite;}
-  .marquee-track:hover{animation-play-state:paused;}
-  @keyframes marquee{from{transform:translateX(0);} to{transform:translateX(-50%);}}
-  .marquee-item{display:flex; align-items:center; gap:10px; padding:0 28px; font-family:'Space Grotesk'; font-size:0.98rem; font-weight:600; color:var(--text-dim); white-space:nowrap;}
-  .marquee-item .msep{width:5px; height:5px; border-radius:50%; background:var(--mc, var(--c1)); box-shadow:0 0 8px var(--mc, var(--c1));}
-
-  section{padding:60px 0;}
-  .section-head{margin-bottom:34px;}
-  .kicker{font-size:0.78rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; background:var(--gradient); -webkit-background-clip:text; background-clip:text; color:transparent;}
-  .section-title{font-size:1.8rem; margin-top:10px; color:var(--text);}
-  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
-
-  .highlights-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:18px;}
-  .highlight-card{background:linear-gradient(160deg, rgba(255,255,255,0.055), rgba(255,255,255,0.015)); border:1px solid var(--border); border-radius:18px; padding:26px 22px; text-align:left; position:relative; overflow:hidden; backdrop-filter:blur(6px); transition:transform .35s cubic-bezier(.16,1,.3,1), border-color .35s, box-shadow .35s;}
-  .highlight-card::before{content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--gradient); opacity:0.7; transform:scaleX(0); transform-origin:left; transition:transform .5s ease;}
-  .highlight-card::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.07), transparent 70%); opacity:0; transition:opacity .35s ease;}
-  .highlight-card:hover{transform:translateY(-8px); border-color:var(--hc, var(--c1)); box-shadow:0 20px 40px -18px var(--hc, var(--c1));}
-  .highlight-card:hover::before{transform:scaleX(1);}
-  .highlight-card:hover::after{opacity:1;}
-  .highlight-icon{width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; background:radial-gradient(circle at 30% 25%, var(--hc, var(--c1)) 0%, transparent 70%), rgba(255,255,255,0.05); border:1px solid var(--border); font-size:1.4rem; margin-bottom:18px; color:var(--hc, var(--c1)); box-shadow:0 0 24px -8px var(--hc, var(--c1));}
-  .highlight-icon svg{width:22px; height:22px;}
-  .highlight-card h4{font-size:1.02rem; margin-bottom:9px; color:var(--text);}
-  .highlight-card p{font-size:0.88rem; color:var(--text-dim); line-height:1.6;}
-  .hl1{--hc:var(--c1);} .hl2{--hc:var(--c2);} .hl3{--hc:var(--c4);} .hl4{--hc:var(--c5);}
-
-  .dash-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:20px;}
-  @media (max-width:860px){ .dash-grid{grid-template-columns:1fr;} }
-  .panel{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:26px; position:relative; overflow:hidden;}
-  .panel::before{content:''; position:absolute; top:-1px; left:24px; right:24px; height:1px; background:var(--gradient); opacity:0.6;}
-  .panel::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.06), transparent 70%); opacity:0; transition:opacity .35s ease;}
-  .panel:hover::after{opacity:1;}
-  .panel h3{font-size:0.98rem; margin-bottom:4px; display:flex; align-items:center; gap:8px; position:relative; z-index:1;}
-  .panel .panel-sub{font-size:0.78rem; color:var(--text-faint); margin-bottom:20px; position:relative; z-index:1;}
-  .panel h3 .dotcolor{width:8px; height:8px; border-radius:2px; background:var(--gradient); display:inline-block;}
-
-  .bar-row{display:flex; align-items:center; gap:14px; margin-bottom:16px; position:relative; z-index:1;}
-  .bar-row:last-child{margin-bottom:0;}
-  .bar-label{width:130px; font-size:0.82rem; color:var(--text-dim); flex-shrink:0;}
-  .bar-track{flex:1; height:10px; background:rgba(255,255,255,0.05); border-radius:6px; overflow:hidden; position:relative;}
-  .bar-fill{position:absolute; inset:0; width:0%; border-radius:6px; background:var(--bc, var(--c1)); box-shadow:0 0 10px var(--bc, var(--c1)); transition:width 1.3s cubic-bezier(.16,1,.3,1);}
-  .bar-val{width:44px; text-align:right; font-size:0.8rem; color:var(--text-faint); font-family:'JetBrains Mono'; flex-shrink:0;}
-
-  .tenure-row{display:flex; align-items:center; gap:14px; margin-bottom:14px; position:relative; z-index:1;}
-  .tenure-row:last-child{margin-bottom:0;}
-  .tenure-label{width:150px; font-size:0.8rem; color:var(--text-dim); flex-shrink:0;}
-  .tenure-track{flex:1; height:9px; background:rgba(255,255,255,0.05); border-radius:5px; overflow:hidden;}
-  .tenure-fill{height:100%; width:0%; border-radius:5px; background:var(--bc, var(--c2)); box-shadow:0 0 8px var(--bc, var(--c2)); transition:width 1.3s cubic-bezier(.16,1,.3,1);}
-  .tenure-val{width:70px; text-align:right; font-size:0.76rem; color:var(--text-faint); font-family:'JetBrains Mono'; flex-shrink:0;}
-  .tenure-fill.ongoing{animation:pulse 1.8s ease-in-out infinite;}
-
-  .summary-card{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:32px; position:relative; overflow:hidden;}
-  .summary-card::before{content:''; position:absolute; top:0; left:0; width:4px; height:100%; background:var(--gradient);}
-  .summary-text{color:var(--text-dim); font-size:1.04rem; max-width:820px;}
-
-  .comp-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:20px;}
-  .comp-card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; transition:transform .3s, border-color .3s, box-shadow .3s; position:relative; overflow:hidden;}
-  .comp-card::after{content:''; position:absolute; inset:0; border-radius:inherit; background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%), var(--gc, var(--c1)) 0%, transparent 65%); opacity:0; transition:opacity .35s; pointer-events:none;}
-  .comp-card:hover{transform:translateY(-6px); border-color:var(--gc, var(--c1)); box-shadow:0 12px 32px -12px rgba(0,0,0,0.5);}
-  .comp-card:hover::after{opacity:0.08;}
-  .comp-card h3{font-size:1.02rem; margin-bottom:16px; display:flex; align-items:center; gap:11px; position:relative; z-index:1;}
-  .comp-icon{width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--gc, var(--c1)); color:#060911; font-size:1.05rem; flex-shrink:0; font-weight:700; box-shadow:0 4px 14px -4px var(--gc, var(--c1));}
-  .comp-icon svg{width:18px; height:18px;}
-  .tags{display:flex; flex-wrap:wrap; gap:8px; position:relative; z-index:1;}
-  .tag{font-size:0.8rem; color:var(--text-dim); background:rgba(255,255,255,0.04); border:1px solid var(--border); padding:6px 12px; border-radius:8px; transition:all .2s; cursor:default;}
-  .tag:hover{color:var(--text); border-color:var(--gc, var(--c1)); background:rgba(255,255,255,0.08); transform:translateY(-2px);}
-  .cc1{--gc:var(--c1);} .cc2{--gc:var(--c3);} .cc3{--gc:var(--c6);} .cc4{--gc:var(--c5);} .cc5{--gc:var(--c4);} .cc6{--gc:var(--c2);}
-
-  .timeline{position:relative; padding-left:36px;}
-  .timeline::before{content:''; position:absolute; left:6px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--c1), var(--c2), var(--c3), var(--c4)); opacity:0.5;}
-  .tl-item{position:relative; padding-bottom:44px;}
-  .tl-item:last-child{padding-bottom:0;}
-  .tl-dot{position:absolute; left:-36px; top:4px; width:16px; height:16px; border-radius:50%; background:var(--bg); border:2px solid var(--tc, var(--c1)); z-index:2;}
-  .tl-item.current .tl-dot{background:var(--tc, var(--c1)); box-shadow:0 0 0 5px rgba(0,229,199,0.18), 0 0 16px var(--tc, var(--c1)); animation:pulse 1.8s ease-in-out infinite;}
-  .tl-card{background:var(--card); border:1px solid var(--border); border-radius:14px; padding:22px 24px; transition:transform .3s, border-color .3s; position:relative; overflow:hidden;}
-  .tl-card::before{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.06), transparent 70%); opacity:0; transition:opacity .35s ease;}
-  .tl-card:hover{transform:translateX(4px); border-color:var(--tc, var(--c1));}
-  .tl-card:hover::before{opacity:1;}
-  .tl-header{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:6px; position:relative; z-index:1;}
-  .tl-role{font-size:1.14rem; font-weight:700; color:var(--text);}
-  .tl-company{color:var(--tc, var(--c2)); font-weight:600;}
-  .tl-date{font-size:0.78rem; color:var(--text-faint); white-space:nowrap; font-weight:600; border:1px solid var(--border); padding:4px 12px; border-radius:999px;}
-  .tl-item.current .tl-date{color:var(--tc, var(--c1)); border-color:var(--tc, var(--c1)); background:rgba(0,229,199,0.07);}
-  .tl-loc{color:var(--text-faint); font-size:0.85rem; margin-bottom:14px; position:relative; z-index:1;}
-  .tl-list{list-style:none; display:flex; flex-direction:column; gap:9px; position:relative; z-index:1;}
-  .tl-list li{position:relative; padding-left:20px; color:var(--text-dim); font-size:0.94rem;}
-  .tl-list li::before{content:'▹'; position:absolute; left:0; top:0; color:var(--tc, var(--c1)); font-weight:700;}
-  .tl-item:nth-child(1){--tc:var(--c1);} .tl-item:nth-child(2){--tc:var(--c2);} .tl-item:nth-child(3){--tc:var(--c3);}
-  .tl-item:nth-child(4){--tc:var(--c4);} .tl-item:nth-child(5){--tc:var(--c5);} .tl-item:nth-child(6){--tc:var(--c6);} .tl-item:nth-child(7){--tc:var(--c1);}
-
-  .grid-2{display:grid; grid-template-columns:1.1fr 1fr; gap:22px;}
-  @media (max-width:820px){ .grid-2{grid-template-columns:1fr;} }
-  .info-card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:26px; transition:border-color .3s; position:relative; overflow:hidden;}
-  .info-card::before{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:radial-gradient(280px circle at var(--sx,50%) var(--sy,50%), rgba(255,255,255,0.06), transparent 70%); opacity:0; transition:opacity .35s ease;}
-  .info-card:hover{border-color:var(--c2);}
-  .info-card:hover::before{opacity:1;}
-  .info-card h3{font-size:1.02rem; margin-bottom:18px; color:var(--text); display:flex; align-items:center; gap:9px; position:relative; z-index:1;}
-  .info-card h3::before{content:''; width:8px; height:8px; border-radius:2px; background:var(--gradient); display:inline-block;}
-  .edu-item{display:flex; justify-content:space-between; gap:12px; padding:13px 0; border-bottom:1px solid var(--border); position:relative; z-index:1;}
-  .edu-item:last-child{border-bottom:none;}
-  .edu-degree{font-weight:700; font-size:0.95rem;}
-  .edu-school{color:var(--text-dim); font-size:0.85rem; margin-top:2px;}
-  .edu-year{color:var(--c1); font-size:0.85rem; font-weight:700; white-space:nowrap;}
-
-  .cert-group{margin-bottom:20px; position:relative; z-index:1;}
-  .cert-group:last-child{margin-bottom:0;}
-  .cert-group h4{font-size:0.76rem; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-faint); margin-bottom:11px;}
-  .cert-item{display:flex; justify-content:space-between; gap:10px; font-size:0.89rem; color:var(--text-dim); padding:7px 0; border-bottom:1px dashed rgba(255,255,255,0.05);}
-  .cert-item:last-child{border-bottom:none;}
-  .cert-item .yr{color:var(--c5); font-weight:700; white-space:nowrap;}
-
-  .lang-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:4px; position:relative; z-index:1;}
-  .lang-item{display:flex; flex-direction:column; align-items:center; gap:8px; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px 10px; transition:transform .2s, border-color .2s;}
-  .lang-item:hover{transform:translateY(-3px); border-color:var(--c3);}
-  .lang-ring-wrap{position:relative; width:64px; height:64px;}
-  .lang-ring-wrap svg{width:100%; height:100%; transform:rotate(-90deg);}
-  .lang-ring-wrap circle{fill:none; stroke-width:6;}
-  .lang-bg{stroke:rgba(255,255,255,0.06);}
-  .lang-fg{stroke-linecap:round; stroke-dasharray:169.6; stroke-dashoffset:169.6; transition:stroke-dashoffset 1.3s cubic-bezier(.16,1,.3,1);}
-  .lang-center{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; font-family:'JetBrains Mono';}
-  .lang-name{font-size:0.88rem; font-weight:700;}
-
-  .cta-panel{position:relative; border-radius:24px; padding:56px 40px; text-align:center; overflow:hidden; background:radial-gradient(ellipse at 30% 0%, rgba(0,229,199,0.14), transparent 55%), radial-gradient(ellipse at 80% 100%, rgba(162,107,255,0.14), transparent 55%), var(--card); border:1px solid var(--border);}
-  .cta-panel h2{font-size:1.9rem; margin-bottom:14px;}
-  .cta-panel p{color:var(--text-dim); font-size:1rem; max-width:560px; margin:0 auto 30px;}
-  .cta-buttons{display:flex; flex-wrap:wrap; gap:14px; justify-content:center;}
-  .btn{display:inline-flex; align-items:center; gap:9px; padding:13px 26px; border-radius:12px; font-weight:700; font-size:0.92rem; transition:transform .25s, box-shadow .25s;}
-  .btn-primary{background:var(--gradient); color:#060911; box-shadow:0 10px 30px -10px rgba(0,229,199,0.5); position:relative; overflow:hidden;}
-  .btn-primary::after{content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent); transform:skewX(-20deg);}
-  .btn-primary:hover::after{animation:shine 1.1s ease forwards;}
-  @keyframes shine{from{left:-60%;} to{left:130%;}}
-  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 16px 36px -10px rgba(0,229,199,0.65); text-decoration:none;}
-  .btn-outline{border:1px solid var(--border); color:var(--text); background:rgba(255,255,255,0.03);}
-  .btn-outline:hover{transform:translateY(-3px); border-color:var(--c2); text-decoration:none; color:var(--text);}
-
-  footer{padding:48px 0 70px; text-align:center; color:var(--text-faint); font-size:0.86rem; position:relative;}
-  footer::before{content:''; display:block; width:100px; height:3px; margin:0 auto 30px; background:var(--gradient); border-radius:2px;}
-  footer a{color:var(--text-dim);}
-  footer a:hover{color:var(--c1);}
-
-  ::-webkit-scrollbar{width:10px;}
-  ::-webkit-scrollbar-track{background:var(--bg);}
-  ::-webkit-scrollbar-thumb{background:var(--c2); border-radius:6px;}
-
-  @media print{ nav, .progress-bar, .bg-scene{display:none;} body{background:#fff; color:#111;} }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Leave Planning Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
-<div class="progress-bar" id="progressBar"></div>
-
-<div class="bg-scene">
-  <canvas id="netCanvas"></canvas>
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
-  <div class="grid-overlay"></div>
-  <div class="grain"></div>
-</div>
-
-<nav>
-  <div class="container">
-    <div class="logo">
-      <svg class="logo-chip" viewBox="0 0 40 40" fill="none">
-        <defs><linearGradient id="chipGrad" x1="0" y1="0" x2="40" y2="40"><stop offset="0%" stop-color="#00e5c7"/><stop offset="50%" stop-color="#5b8dff"/><stop offset="100%" stop-color="#a26bff"/></linearGradient></defs>
-        <g class="chip-glow">
-          <rect x="11" y="11" width="18" height="18" rx="3" stroke="url(#chipGrad)" stroke-width="2"/>
-          <rect x="16" y="16" width="8" height="8" rx="1.5" fill="url(#chipGrad)"/>
-          <path d="M20 4v6M20 30v6M4 20h6M30 20h6M8 8l4 4M32 32l-4-4M8 32l4-4M32 8l-4 4" stroke="url(#chipGrad)" stroke-width="1.6" stroke-linecap="round"/>
-        </g>
-      </svg>
-      Nidhin Kumar K N
-    </div>
-    <ul class="navlinks">
-      <li><a href="#summary" class="navlink">Summary</a></li>
-      <li><a href="#skills" class="navlink">Skills</a></li>
-      <li><a href="#experience" class="navlink">Experience</a></li>
-      <li><a href="#education" class="navlink">Education</a></li>
-      <li><a href="#certifications" class="navlink">Certifications</a></li>
-    </ul>
-  </div>
-</nav>
-
-<header class="hero container">
-  <div class="hero-grid">
-    <div class="emblem-wrap">
-      <div class="emblem-ring r3"></div>
-      <div class="emblem-ring r2"></div>
-      <div class="emblem-ring"></div>
-      <div class="emblem-core">
-        <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
-          <g stroke="rgba(0,229,199,0.35)" stroke-width="1" fill="none">
-            <path d="M100 20 L100 60"/><path d="M100 140 L100 180"/>
-            <path d="M20 100 L60 100"/><path d="M140 100 L180 100"/>
-            <path d="M45 45 L75 75"/><path d="M125 125 L155 155"/>
-            <path d="M155 45 L125 75"/><path d="M75 125 L45 155"/>
-            <circle cx="100" cy="100" r="70" stroke-dasharray="4 6"/>
-            <circle cx="100" cy="100" r="88" stroke="rgba(91,141,255,0.2)" stroke-dasharray="2 8"/>
-          </g>
-          <g fill="var(--c1)">
-            <circle cx="100" cy="20" r="3"/><circle cx="100" cy="180" r="3" fill="var(--c4)"/>
-            <circle cx="20" cy="100" r="3" fill="var(--c3)"/><circle cx="180" cy="100" r="3" fill="var(--c2)"/>
-          </g>
-        </svg>
-        <img class="emblem-photo" src="photo_square.jpg" alt="Nidhin Kumar K N">
-      </div>
-      <div class="emblem-node n1"></div>
-      <div class="emblem-node n2"></div>
-      <div class="emblem-node n3"></div>
-      <div class="emblem-node n4"></div>
-    </div>
-
-    <div>
-      <div class="eyebrow"><span class="live-dot"></span> Available for architecture &amp; advisory engagements</div>
-      <h1 class="name">Nidhin Kumar K N</h1>
-      <div class="role"><span id="typedRole" class="typed"></span></div>
-
-      <div class="contact-row">
-        <div class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-          Kochi, India
-        </div>
-        <div class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-          <a href="tel:+918606365068">+91-8606365068</a>
-        </div>
-        <div class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4Z"/><path d="m22 6-10 7L2 6"/></svg>
-          <a href="mailto:nidhinkn280@gmail.com">nidhinkn280@gmail.com</a>
-        </div>
-        <div class="contact-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          <a href="https://linkedin.com/in/nidhin-kumar-a6706342" target="_blank" rel="noopener">linkedin.com/in/nidhin-kumar-a6706342</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="ring-row">
-    <div class="ring-card reveal">
-      <div class="ring-wrap">
-        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="97" style="stroke:var(--c1)"/></svg>
-        <div class="ring-center"><span class="ring-num" style="color:var(--c1)">17+</span></div>
-      </div>
-      <div class="ring-label">Years of experience</div>
-    </div>
-    <div class="ring-card reveal">
-      <div class="ring-wrap">
-        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="100" style="stroke:var(--c2)"/></svg>
-        <div class="ring-center"><span class="ring-num" style="color:var(--c2)">3</span></div>
-      </div>
-      <div class="ring-label">Cloud platforms mastered</div>
-    </div>
-    <div class="ring-card reveal">
-      <div class="ring-wrap">
-        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="94" style="stroke:var(--c3)"/></svg>
-        <div class="ring-center"><span class="ring-num" style="color:var(--c3)">100+</span></div>
-      </div>
-      <div class="ring-label">AI agents architected</div>
-    </div>
-    <div class="ring-card reveal">
-      <div class="ring-wrap">
-        <svg viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="45"/><circle class="ring-fg" cx="50" cy="50" r="45" data-percent="88" style="stroke:var(--c4)"/></svg>
-        <div class="ring-center"><span class="ring-num" style="color:var(--c4)">6</span></div>
-      </div>
-      <div class="ring-label">Professional certifications</div>
-    </div>
-  </div>
-</header>
-
-<div class="marquee-shell">
-  <div class="container" style="padding:0;">
-    <div class="marquee-track">
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>AWS</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Azure</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>GCP</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>Agentic AI</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>RAG</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>MCP</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Kubernetes</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Terraform</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>Zero Trust</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>ArgoCD</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>Kafka</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>Databricks</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Datadog</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Dynatrace</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>AWS</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Azure</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>GCP</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>Agentic AI</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>RAG</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>MCP</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Kubernetes</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Terraform</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c3)"></span>Zero Trust</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c4)"></span>ArgoCD</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c5)"></span>Kafka</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c6)"></span>Databricks</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c1)"></span>Datadog</span>
-      <span class="marquee-item"><span class="msep" style="--mc:var(--c2)"></span>Dynatrace</span>
-    </div>
-  </div>
-</div>
-
-<section id="highlights">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Why work with me</div>
-      <h2 class="section-title">Built for enterprise-grade, AI-first delivery</h2>
-    </div>
-    <div class="highlights-grid">
-      <div class="highlight-card hl1 reveal">
-        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.9 7.4 10.4 16M16.1 7.4 13.6 16M8.4 6h7.2"/></svg></div>
-        <h4>Agentic AI &amp; RAG Systems</h4>
-        <p>Multi-agent ecosystems, RAG pipelines, and MCP-based orchestration designed for production scale and governance.</p>
-      </div>
-      <div class="highlight-card hl2 reveal">
-        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H6a4 4 0 1 1 .68-7.94A5.5 5.5 0 0 1 17 9.5a4 4 0 0 1 .5 9.5Z"/></svg></div>
-        <h4>Multi-Cloud Architecture</h4>
-        <p>Secure, well-governed landing zones and migrations across AWS, Azure, and GCP for mission-critical workloads.</p>
-      </div>
-      <div class="highlight-card hl3 reveal">
-        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3Z"/><path d="m9.2 12 1.9 1.9L15 10"/></svg></div>
-        <h4>Zero-Trust DevSecOps</h4>
-        <p>Security-first CI/CD, policy-as-code, and AI DevSecOps embedded into every pipeline and deployment.</p>
-      </div>
-      <div class="highlight-card hl4 reveal">
-        <div class="highlight-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5 7L13 5l2.5 7H22"/></svg></div>
-        <h4>Reliability at Scale</h4>
-        <p>Observability-driven operations across Dynatrace, Datadog, and OpenTelemetry, holding the line on strict SLAs.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="dashboard">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Snapshot</div>
-      <h2 class="section-title">Career Dashboard</h2>
-    </div>
-    <div class="dash-grid">
-      <div class="panel reveal">
-        <h3><span class="dotcolor"></span> Skill Distribution</h3>
-        <div class="panel-sub">Tools &amp; capabilities mapped per competency area</div>
-        <div class="bar-row"><div class="bar-label">AI/ML &amp; Agentic AI</div><div class="bar-track"><div class="bar-fill" data-w="100" style="--bc:var(--c3)"></div></div><div class="bar-val">10</div></div>
-        <div class="bar-row"><div class="bar-label">Security</div><div class="bar-track"><div class="bar-fill" data-w="90" style="--bc:var(--c4)"></div></div><div class="bar-val">9</div></div>
-        <div class="bar-row"><div class="bar-label">Cloud &amp; IoT</div><div class="bar-track"><div class="bar-fill" data-w="70" style="--bc:var(--c1)"></div></div><div class="bar-val">7</div></div>
-        <div class="bar-row"><div class="bar-label">Observability</div><div class="bar-track"><div class="bar-fill" data-w="60" style="--bc:var(--c6)"></div></div><div class="bar-val">6</div></div>
-        <div class="bar-row"><div class="bar-label">DevOps</div><div class="bar-track"><div class="bar-fill" data-w="50" style="--bc:var(--c2)"></div></div><div class="bar-val">5</div></div>
-        <div class="bar-row"><div class="bar-label">IaC &amp; Automation</div><div class="bar-track"><div class="bar-fill" data-w="50" style="--bc:var(--c5)"></div></div><div class="bar-val">5</div></div>
-      </div>
-
-      <div class="panel reveal">
-        <h3><span class="dotcolor"></span> Tenure by Organization</h3>
-        <div class="panel-sub">Years of ownership across each engagement</div>
-        <div class="tenure-row"><div class="tenure-label">Quest Global</div><div class="tenure-track"><div class="tenure-fill ongoing" data-w="10" style="--bc:var(--c1)"></div></div><div class="tenure-val">Present</div></div>
-        <div class="tenure-row"><div class="tenure-label">Sasken Technologies</div><div class="tenure-track"><div class="tenure-fill" data-w="43" style="--bc:var(--c2)"></div></div><div class="tenure-val">~1.7 yrs</div></div>
-        <div class="tenure-row"><div class="tenure-label">EPAM Systems</div><div class="tenure-track"><div class="tenure-fill" data-w="60" style="--bc:var(--c3)"></div></div><div class="tenure-val">~2.4 yrs</div></div>
-        <div class="tenure-row"><div class="tenure-label">ULTS Pvt. Ltd.</div><div class="tenure-track"><div class="tenure-fill" data-w="50" style="--bc:var(--c4)"></div></div><div class="tenure-val">~2 yrs</div></div>
-        <div class="tenure-row"><div class="tenure-label">RST Technologies</div><div class="tenure-track"><div class="tenure-fill" data-w="75" style="--bc:var(--c5)"></div></div><div class="tenure-val">~3 yrs</div></div>
-        <div class="tenure-row"><div class="tenure-label">Khayber Fire &amp; Security</div><div class="tenure-track"><div class="tenure-fill" data-w="100" style="--bc:var(--c6)"></div></div><div class="tenure-val">~4 yrs</div></div>
-        <div class="tenure-row"><div class="tenure-label">GEMS Pvt. Ltd.</div><div class="tenure-track"><div class="tenure-fill" data-w="75" style="--bc:var(--c1)"></div></div><div class="tenure-val">~3 yrs</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="summary">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Profile</div>
-      <h2 class="section-title">Summary</h2>
-    </div>
-    <div class="summary-card reveal">
-      <p class="summary-text">
-        Cloud, DevOps, and AI Architect with 17+ years of experience delivering enterprise-scale architectures across AWS and Azure, and driving AI-driven transformations. Strong background in enterprise cloud architecture, large-scale migrations, platform engineering, and multi-agent AI ecosystems. Experienced in designing secure landing zones, microservices, AI DevSecOps pipelines, and comprehensive multi-agent systems utilizing RAG and Agentic AI. Known for balancing architecture ownership, people management, and hands-on technical involvement, with a strong focus on reliability, Zero Trust Security, and Agentic AI innovation to drive business value.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section id="skills">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Expertise</div>
-      <h2 class="section-title">Core Competencies</h2>
-    </div>
-    <div class="comp-grid">
-      <div class="comp-card cc1 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H6a4 4 0 1 1 .68-7.94A5.5 5.5 0 0 1 17 9.5a4 4 0 0 1 .5 9.5Z"/></svg></span> Cloud &amp; IoT</h3>
-        <div class="tags">
-          <span class="tag">AWS</span><span class="tag">Azure</span><span class="tag">GCP</span>
-          <span class="tag">Hybrid Strategy</span><span class="tag">Landing Zones</span>
-          <span class="tag">IoT Architecture</span><span class="tag">Automotive Cloud</span>
-        </div>
-      </div>
-      <div class="comp-card cc2 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.9 7.4 10.4 16M16.1 7.4 13.6 16M8.4 6h7.2"/></svg></span> AI / ML &amp; Agentic AI</h3>
-        <div class="tags">
-          <span class="tag">RAG</span><span class="tag">MCP</span><span class="tag">AWS Bedrock</span>
-          <span class="tag">Azure OpenAI</span><span class="tag">Vertex AI</span><span class="tag">Multi-Agent Systems</span>
-          <span class="tag">MongoDB</span><span class="tag">Gen AI</span><span class="tag">Databricks</span><span class="tag">Kafka</span>
-        </div>
-      </div>
-      <div class="comp-card cc3 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg></span> DevOps</h3>
-        <div class="tags">
-          <span class="tag">Kubernetes (EKS/AKS/GKE)</span><span class="tag">Docker</span>
-          <span class="tag">Helm</span><span class="tag">GitOps</span><span class="tag">Platform Engineering</span>
-        </div>
-      </div>
-      <div class="comp-card cc4 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.6"/><path d="M19.2 13.3a1.5 1.5 0 0 0 .3 1.66l.05.05a1.83 1.83 0 1 1-2.58 2.58l-.05-.05a1.5 1.5 0 0 0-1.66-.3 1.5 1.5 0 0 0-.9 1.37V19a1.83 1.83 0 0 1-3.66 0v-.08a1.5 1.5 0 0 0-.98-1.38 1.5 1.5 0 0 0-1.66.3l-.05.05a1.83 1.83 0 1 1-2.59-2.58l.05-.05a1.5 1.5 0 0 0 .3-1.66 1.5 1.5 0 0 0-1.37-.9H4a1.83 1.83 0 0 1 0-3.66h.08a1.5 1.5 0 0 0 1.38-.98 1.5 1.5 0 0 0-.3-1.66l-.05-.05a1.83 1.83 0 1 1 2.58-2.59l.05.05a1.5 1.5 0 0 0 1.66.3H9.5a1.5 1.5 0 0 0 .9-1.37V4a1.83 1.83 0 0 1 3.66 0v.08a1.5 1.5 0 0 0 .9 1.37 1.5 1.5 0 0 0 1.66-.3l.05-.05a1.83 1.83 0 1 1 2.58 2.58l-.05.05a1.5 1.5 0 0 0-.3 1.66v.1a1.5 1.5 0 0 0 1.37.9H20a1.83 1.83 0 0 1 0 3.66h-.08a1.5 1.5 0 0 0-1.37.9Z"/></svg></span> IaC &amp; Automation</h3>
-        <div class="tags">
-          <span class="tag">Terraform</span><span class="tag">Ansible</span><span class="tag">Python</span>
-          <span class="tag">Java (Basics)</span><span class="tag">Shell Scripting</span>
-        </div>
-      </div>
-      <div class="comp-card cc5 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5l-8-3Z"/><path d="m9.2 12 1.9 1.9L15 10"/></svg></span> Security</h3>
-        <div class="tags">
-          <span class="tag">AI DevSecOps</span><span class="tag">CI/CD</span><span class="tag">GitHub Actions</span>
-          <span class="tag">GitLab CI</span><span class="tag">ArgoCD</span><span class="tag">Zero Trust</span>
-          <span class="tag">IAM</span><span class="tag">Policy as Code</span><span class="tag">Responsible AI</span>
-        </div>
-      </div>
-      <div class="comp-card cc6 reveal">
-        <h3><span class="comp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l2.5 7L13 5l2.5 7H22"/></svg></span> Observability</h3>
-        <div class="tags">
-          <span class="tag">Dynatrace</span><span class="tag">Datadog</span><span class="tag">Prometheus</span>
-          <span class="tag">Grafana</span><span class="tag">OpenTelemetry</span><span class="tag">ELK Stack</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="experience">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Career</div>
-      <h2 class="section-title">Experience</h2>
-    </div>
-    <div class="timeline">
-
-      <div class="tl-item current reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">AI Technical Manager</span> · <span class="tl-company">Quest Global</span></div>
-            <div class="tl-date">Mar 2026 — Present</div>
-          </div>
-          <div class="tl-loc">Bangalore, India</div>
-          <ul class="tl-list">
-            <li>Designed the overall AI platform architecture utilizing RAG, MCP, and Agentic AI, selecting optimal AI services including Amazon Bedrock, Azure AI, and Vertex AI to ensure a scalable, secure, and production-ready ecosystem.</li>
-            <li>Led the implementation of multi-agent systems featuring 100+ specialized AI agents for incident management, Jira automation, knowledge retrieval, and customer support, defining agent communication, workflows, and governance standards.</li>
-            <li>Managed cross-functional teams comprising AI Engineers, MLOps Engineers, Cloud Architects, and DevOps professionals, coordinating sprint planning, technical reviews, risk mitigation, and stakeholder communication for on-time delivery.</li>
-            <li>Established comprehensive observability using Datadog, Dynatrace, OpenTelemetry, Prometheus, and Grafana to monitor model accuracy, latency, token consumption, infrastructure health, and business KPIs, maintaining strict SLA compliance.</li>
-            <li>Defined AI security, compliance, audit logging, and responsible AI practices, collaborating with business stakeholders to align solutions with business goals, drive AI adoption, and control costs, risks, and operational complexity.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">Senior Cloud &amp; DevOps Architect / Technical Manager</span> · <span class="tl-company">Sasken Technologies</span></div>
-            <div class="tl-date">Jun 2024 — Feb 2026</div>
-          </div>
-          <div class="tl-loc">Bangalore, India</div>
-          <ul class="tl-list">
-            <li>Led enterprise cloud architecture and DevOps strategy across AWS, Azure, and IoT environments.</li>
-            <li>Architected AI/ML, Gen AI, and Agentic AI solutions for Automotive industry use cases.</li>
-            <li>Designed secure cloud landing zones with network segmentation, IAM standards, and governance controls.</li>
-            <li>Drove large-scale cloud migration and modernization initiatives for frontend and backend applications.</li>
-            <li>Architected microservices and event-driven platforms using Kubernetes and cloud-native services.</li>
-            <li>Managed and mentored DevOps and platform teams, supporting delivery planning and skill development.</li>
-            <li>Implemented AI DevSecOps practices integrating security scanning, policy enforcement, and Zero Trust.</li>
-            <li>Drove cloud cost optimization initiatives through autoscaling, right-sizing, and governance practices.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">Cloud &amp; DevOps Architect (Lead)</span> · <span class="tl-company">EPAM Systems</span></div>
-            <div class="tl-date">Dec 2021 — May 2024</div>
-          </div>
-          <div class="tl-loc">Bangalore, India</div>
-          <ul class="tl-list">
-            <li>Led enterprise cloud migration programs across AWS and Azure.</li>
-            <li>Designed Kubernetes-based microservices and event-driven architectures supporting frontend and backend services.</li>
-            <li>Defined CI/CD, Infrastructure as Code, and DevSecOps standards adopted across multiple teams.</li>
-            <li>Supported data platforms and databases including MongoDB and Databricks for analytics and processing workloads.</li>
-            <li>Integrated observability using Dynatrace, Datadog, and ELK for production platforms.</li>
-            <li>Collaborated with security, application, and product teams to align architecture with business requirements.</li>
-            <li>Improved availability, scalability, and security through proactive monitoring and automation.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">Solution Architect</span> · <span class="tl-company">ULTS Pvt. Ltd.</span></div>
-            <div class="tl-date">2019 — 2021</div>
-          </div>
-          <div class="tl-loc">Kozhikode, India</div>
-          <ul class="tl-list">
-            <li>Designed cloud architectures and CI/CD pipelines for enterprise and government projects.</li>
-            <li>Led Docker and Kubernetes adoption to standardize deployment workflows.</li>
-            <li>Automated environment provisioning and configuration management using Terraform and Ansible.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">IT Project Manager / Cloud Architect</span> · <span class="tl-company">RST Technologies</span></div>
-            <div class="tl-date">2016 — 2019</div>
-          </div>
-          <div class="tl-loc">Bangalore, India</div>
-          <ul class="tl-list">
-            <li>Led cloud migration initiatives to AWS for mission-critical workloads.</li>
-            <li>Introduced CI/CD practices and version control to improve release reliability.</li>
-            <li>Managed hybrid infrastructure operations with ownership of uptime and SLA commitments.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">Infrastructure Support Manager</span> · <span class="tl-company">Khayber Fire &amp; Security</span></div>
-            <div class="tl-date">2012 — 2016</div>
-          </div>
-          <div class="tl-loc">Bahrain</div>
-          <ul class="tl-list">
-            <li>Managed servers, storage, and network infrastructure for large-scale security systems.</li>
-            <li>Supported virtualization and infrastructure consolidation initiatives to improve efficiency.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-header">
-            <div><span class="tl-role">Network Administrator</span> · <span class="tl-company">GEMS Pvt. Ltd.</span></div>
-            <div class="tl-date">2009 — 2012</div>
-          </div>
-          <ul class="tl-list">
-            <li>Administered Linux and Windows server environments.</li>
-            <li>Supported daily IT operations and basic automation tasks.</li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section id="education">
-  <div class="container">
-    <div class="section-head reveal">
-      <div class="kicker">Background</div>
-      <h2 class="section-title">Education, Certifications &amp; Languages</h2>
-    </div>
-    <div class="grid-2">
-      <div>
-        <div class="info-card reveal" style="margin-bottom:22px;">
-          <h3>Education</h3>
-          <div class="edu-item">
-            <div><div class="edu-degree">MBA in Project Management</div><div class="edu-school">ISBM</div></div>
-            <div class="edu-year">2017</div>
-          </div>
-          <div class="edu-item">
-            <div><div class="edu-degree">Bachelor of Computer Applications (BCA)</div><div class="edu-school">CV Raman University</div></div>
-            <div class="edu-year">2014</div>
-          </div>
-        </div>
-
-        <div class="info-card reveal">
-          <h3>Languages</h3>
-          <div class="lang-grid">
-            <div class="lang-item">
-              <div class="lang-ring-wrap">
-                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="100" style="stroke:var(--c1)"/></svg>
-                <div class="lang-center">C2</div>
-              </div>
-              <div class="lang-name">English</div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-md">
+                    <i class="fa-solid fa-calendar-days text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900">TeamLeave Hub <span id="syncStatus" class="text-xs font-normal bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full ml-2"><i class="fa-solid fa-circle-notch fa-spin mr-1"></i>Connecting Cloud...</span></h1>
+                    <p class="text-xs text-slate-500">Collaborative Leave Planning & Regional Holiday Calendars (Trivandrum, Bangalore, Kochi, Chennai, Pune, US - 2026)</p>
+                </div>
             </div>
-            <div class="lang-item">
-              <div class="lang-ring-wrap">
-                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="100" style="stroke:var(--c3)"/></svg>
-                <div class="lang-center">C2</div>
-              </div>
-              <div class="lang-name">Malayalam</div>
+            <div class="flex items-center space-x-3">
+                <button onclick="openHolidaysModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 px-3 py-2 rounded-lg text-sm font-medium transition flex items-center space-x-2">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="hidden sm:inline">Holidays</span>
+                </button>
+                <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-file-excel"></i>
+                    <span>Export Excel</span>
+                </button>
+                <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition flex items-center space-x-2">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Request Leave</span>
+                </button>
             </div>
-            <div class="lang-item">
-              <div class="lang-ring-wrap">
-                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="80" style="stroke:var(--c2)"/></svg>
-                <div class="lang-center">C1</div>
-              </div>
-              <div class="lang-name">Hindi</div>
-            </div>
-            <div class="lang-item">
-              <div class="lang-ring-wrap">
-                <svg viewBox="0 0 60 60"><circle class="lang-bg" cx="30" cy="30" r="27"/><circle class="lang-fg" cx="30" cy="30" r="27" data-percent="60" style="stroke:var(--c5)"/></svg>
-                <div class="lang-center">B2</div>
-              </div>
-              <div class="lang-name">Tamil</div>
-            </div>
-          </div>
         </div>
-      </div>
+    </header>
 
-      <div class="info-card reveal">
-        <h3 id="certifications">Certifications</h3>
-        <div class="cert-group">
-          <h4>AI / ML</h4>
-          <div class="cert-item"><span>Scaler — Advanced AI/ML Certification</span></div>
-          <div class="cert-item"><span>GCP Professional Machine Learning Engineer</span><span class="yr">2025</span></div>
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Stats Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                <div class="bg-blue-100 text-blue-600 p-3 rounded-xl text-xl">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium">Total Requests</p>
+                    <h3 id="stat-total" class="text-2xl font-bold text-slate-900">0</h3>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                <div class="bg-amber-100 text-amber-600 p-3 rounded-xl text-xl">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium">Pending Approval</p>
+                    <h3 id="stat-pending" class="text-2xl font-bold text-slate-900">0</h3>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                <div class="bg-emerald-100 text-emerald-600 p-3 rounded-xl text-xl">
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium">Approved Leave Days</p>
+                    <h3 id="stat-days" class="text-2xl font-bold text-slate-900">0</h3>
+                </div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
+                <div class="bg-purple-100 text-purple-600 p-3 rounded-xl text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium">Coverage Assigned</p>
+                    <h3 id="stat-coverage" class="text-2xl font-bold text-slate-900">0%</h3>
+                </div>
+            </div>
         </div>
-        <div class="cert-group">
-          <h4>Management</h4>
-          <div class="cert-item"><span>Project Management Professional (PMP)</span><span class="yr">2025</span></div>
+
+        <!-- View Switcher & Interactive Calendar / Heatmap Section -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="bg-indigo-50 text-indigo-600 p-2 rounded-lg">
+                        <i class="fa-solid fa-chart-pie text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-base font-bold text-slate-900">Visual Roster & Coverage Analytics</h2>
+                        <p class="text-xs text-slate-500">Switch between table view, monthly calendar grid, and team workload coverage.</p>
+                    </div>
+                </div>
+                <div class="flex items-center bg-slate-100 p-1 rounded-xl text-sm font-medium">
+                    <button onclick="switchView('table')" id="btn-view-table" class="px-4 py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition">Table View</button>
+                    <button onclick="switchView('calendar')" id="btn-view-calendar" class="px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">Calendar Grid</button>
+                    <button onclick="switchView('analytics')" id="btn-view-analytics" class="px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">Workload Heatmap</button>
+                </div>
+            </div>
+
+            <!-- Calendar Grid Container -->
+            <div id="calendarViewContainer" class="hidden space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 id="calendarMonthTitle" class="font-bold text-slate-800 text-lg">September 2026</h3>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="changeCalendarMonth(-1)" class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="changeCalendarMonth(1)" class="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-600"><i class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-7 gap-2 text-center font-semibold text-xs text-slate-400 uppercase py-2 border-b border-slate-100">
+                    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+                </div>
+                <div id="calendarGridDays" class="grid grid-cols-7 gap-2">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Analytics Heatmap Container -->
+            <div id="analyticsViewContainer" class="hidden space-y-4">
+                <h3 class="font-bold text-slate-800 text-base">Monthly Leave Distribution & Regional Impact</h3>
+                <div id="analyticsBars" class="space-y-3">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Table View Container -->
+            <div id="tableViewContainer" class="space-y-4">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-slate-900">Team Leave Roster & Timeline</h2>
+                        <p class="text-xs text-slate-500">Filter scheduled employee leave and regional office holidays by specific month, year, type, location, or search terms.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+                        <!-- Office Location Filter -->
+                        <select id="filterLocation" onchange="filterLeaves()" class="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="ALL">All Locations</option>
+                            <option value="Trivandrum">Trivandrum</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Kochi">Kochi</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Pune">Pune</option>
+                            <option value="US">US</option>
+                        </select>
+
+                        <!-- Month Filter -->
+                        <select id="filterMonth" onchange="filterLeaves()" class="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="ALL">All Months</option>
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2">March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+
+                        <!-- Year Filter -->
+                        <select id="filterYear" onchange="filterLeaves()" class="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="ALL">All Years</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+
+                        <select id="filterType" onchange="filterLeaves()" class="border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="ALL">All Types</option>
+                            <option value="Sick Leave">Sick Leave</option>
+                            <option value="Holiday">Holiday</option>
+                            <option value="Restricted Holiday">Restricted Holiday</option>
+                            <option value="Earned Leave">Earned Leave</option>
+                        </select>
+
+                        <div class="relative flex-1 sm:flex-initial">
+                            <i class="fa-solid fa-search absolute left-3 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="searchInput" oninput="filterLeaves()" placeholder="Search team member..." class="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full sm:w-48">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-3 px-6 font-semibold">Team Member</th>
+                                <th class="py-3 px-6 font-semibold">Office Location</th>
+                                <th class="py-3 px-6 font-semibold">Leave Type</th>
+                                <th class="py-3 px-6 font-semibold">Month & Year</th>
+                                <th class="py-3 px-6 font-semibold">Start Date</th>
+                                <th class="py-3 px-6 font-semibold">End Date</th>
+                                <th class="py-3 px-6 font-semibold">Duration</th>
+                                <th class="py-3 px-6 font-semibold">Coverage Backup</th>
+                                <th class="py-3 px-6 font-semibold">Task Details & Handover</th>
+                                <th class="py-3 px-6 font-semibold">Status</th>
+                                <th class="py-3 px-6 font-semibold text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaveTableBody" class="divide-y divide-slate-100 text-sm">
+                            <!-- Populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Empty State -->
+                <div id="emptyState" class="hidden py-16 text-center">
+                    <i class="fa-solid fa-calendar-xmark text-4xl text-slate-300 mb-3"></i>
+                    <p class="text-slate-600 font-medium">No leave requests found for the selected filter.</p>
+                    <p class="text-slate-400 text-xs mt-1">Click "Request Leave" to add a new schedule.</p>
+                </div>
+            </div>
         </div>
-        <div class="cert-group">
-          <h4>Cloud</h4>
-          <div class="cert-item"><span>AWS Certified Solutions Architect – Associate</span><span class="yr">2024</span></div>
-          <div class="cert-item"><span>AWS AI Cloud Practitioner</span><span class="yr">2025</span></div>
-          <div class="cert-item"><span>Azure Administrator (AZ-104)</span></div>
+
+    </main>
+
+    <!-- Holidays Reference Modal -->
+    <div id="holidaysModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-5xl w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center space-x-2">
+                    <div class="bg-indigo-100 text-indigo-600 p-2 rounded-lg">
+                        <i class="fa-solid fa-calendar-star"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base">Regional & Public Holiday Calendars (2026)</h3>
+                        <p class="text-xs text-slate-500">Official reference lists for Trivandrum, Bangalore, Kochi, Chennai, Pune, and US locations</p>
+                    </div>
+                </div>
+                <button onclick="closeHolidaysModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="px-6 py-3 bg-slate-100 border-b border-slate-200 flex flex-wrap gap-2 text-xs">
+                <span class="px-2.5 py-1 rounded-full bg-teal-100 text-teal-800 font-semibold">Trivandrum</span>
+                <span class="px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-800 font-semibold">Bangalore</span>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">Kochi</span>
+                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 font-semibold">Chennai</span>
+                <span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-semibold">Pune</span>
+                <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 font-semibold">US</span>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 text-xs uppercase tracking-wider border-b border-slate-200">
+                            <th class="py-3 px-4 font-semibold">Holiday Name</th>
+                            <th class="py-3 px-4 font-semibold">Date</th>
+                            <th class="py-3 px-4 font-semibold">Month</th>
+                            <th class="py-3 px-4 font-semibold">Day</th>
+                            <th class="py-3 px-4 font-semibold">Location / Region</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-sm">
+                        <!-- Bangalore 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Republic Day</td><td class="py-3 px-4 text-slate-600">26 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Ugadi (Kannada New Year)</td><td class="py-3 px-4 text-slate-600">19 March 2026</td><td class="py-3 px-4 text-slate-600">March</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Idul Fitr (Ramzan)</td><td class="py-3 px-4 text-slate-600">20 March 2026</td><td class="py-3 px-4 text-slate-600">March</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">May Day</td><td class="py-3 px-4 text-slate-600">01 May 2026</td><td class="py-3 px-4 text-slate-600">May</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Independence Day</td><td class="py-3 px-4 text-slate-600">15 August 2026</td><td class="py-3 px-4 text-slate-600">August</td><td class="py-3 px-4 text-slate-600">Saturday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Ganesh Chaturthi</td><td class="py-3 px-4 text-slate-600">14 September 2026</td><td class="py-3 px-4 text-slate-600">September</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Gandhi Jayanthi</td><td class="py-3 px-4 text-slate-600">02 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Dussehra (Mahanavami)</td><td class="py-3 px-4 text-slate-600">20 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Tuesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Deepavali</td><td class="py-3 px-4 text-slate-600">08 November 2026</td><td class="py-3 px-4 text-slate-600">November</td><td class="py-3 px-4 text-slate-600">Sunday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-indigo-100 text-indigo-700">Bangalore-H</span></td></tr>
+
+                        <!-- Kochi 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Republic Day</td><td class="py-3 px-4 text-slate-600">26 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Idul Fitr (Ramzan)</td><td class="py-3 px-4 text-slate-600">20 March 2026</td><td class="py-3 px-4 text-slate-600">March</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Election leave</td><td class="py-3 px-4 text-slate-600">09 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Vishu</td><td class="py-3 px-4 text-slate-600">15 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Wednesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">May Day</td><td class="py-3 px-4 text-slate-600">01 May 2026</td><td class="py-3 px-4 text-slate-600">May</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Independence Day</td><td class="py-3 px-4 text-slate-600">15 August 2026</td><td class="py-3 px-4 text-slate-600">August</td><td class="py-3 px-4 text-slate-600">Saturday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Thiruvonam</td><td class="py-3 px-4 text-slate-600">26 August 2026</td><td class="py-3 px-4 text-slate-600">August</td><td class="py-3 px-4 text-slate-600">Wednesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Gandhi Jayanthi</td><td class="py-3 px-4 text-slate-600">02 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Mahanavami</td><td class="py-3 px-4 text-slate-600">20 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Tuesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Deepavali</td><td class="py-3 px-4 text-slate-600">08 November 2026</td><td class="py-3 px-4 text-slate-600">November</td><td class="py-3 px-4 text-slate-600">Sunday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-100 text-emerald-700">Kochi-H</span></td></tr>
+
+                        <!-- Chennai 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Pongal</td><td class="py-3 px-4 text-slate-600">15 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Republic Day</td><td class="py-3 px-4 text-slate-600">26 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Idul Fitr (Ramzan)</td><td class="py-3 px-4 text-slate-600">20 March 2026</td><td class="py-3 px-4 text-slate-600">March</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Tamil New Year</td><td class="py-3 px-4 text-slate-600">14 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Tuesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Election leave</td><td class="py-3 px-4 text-slate-600">23 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">May Day</td><td class="py-3 px-4 text-slate-600">01 May 2026</td><td class="py-3 px-4 text-slate-600">May</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Independence Day</td><td class="py-3 px-4 text-slate-600">15 August 2026</td><td class="py-3 px-4 text-slate-600">August</td><td class="py-3 px-4 text-slate-600">Saturday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Gandhi Jayanthi</td><td class="py-3 px-4 text-slate-600">02 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Mahanavami/Vijayadashami</td><td class="py-3 px-4 text-slate-600">20 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Tuesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Deepavali</td><td class="py-3 px-4 text-slate-600">08 November 2026</td><td class="py-3 px-4 text-slate-600">November</td><td class="py-3 px-4 text-slate-600">Sunday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-amber-100 text-amber-700">Chennai-H</span></td></tr>
+
+                        <!-- Trivandrum 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Republic Day</td><td class="py-3 px-4 text-slate-600">26 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Good Friday</td><td class="py-3 px-4 text-slate-600">03 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Vishu</td><td class="py-3 px-4 text-slate-600">15 April 2026</td><td class="py-3 px-4 text-slate-600">April</td><td class="py-3 px-4 text-slate-600">Wednesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">May Day</td><td class="py-3 px-4 text-slate-600">01 May 2026</td><td class="py-3 px-4 text-slate-600">May</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Thiruvonam</td><td class="py-3 px-4 text-slate-600">26 August 2026</td><td class="py-3 px-4 text-slate-600">August</td><td class="py-3 px-4 text-slate-600">Wednesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Sree Narayana Guru Samadhi</td><td class="py-3 px-4 text-slate-600">21 September 2026</td><td class="py-3 px-4 text-slate-600">September</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Gandhi Jayanthi</td><td class="py-3 px-4 text-slate-600">02 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Dussehra (Mahanavami)</td><td class="py-3 px-4 text-slate-600">20 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Tuesday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Deepavali</td><td class="py-3 px-4 text-slate-600">08 November 2026</td><td class="py-3 px-4 text-slate-600">November</td><td class="py-3 px-4 text-slate-600">Sunday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-teal-100 text-teal-700">Trivandrum-H</span></td></tr>
+
+                        <!-- Pune 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Republic Day</td><td class="py-3 px-4 text-slate-600">26 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">Pune-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Ganesh Chaturthi</td><td class="py-3 px-4 text-slate-600">14 September 2026</td><td class="py-3 px-4 text-slate-600">September</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">Pune-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Gandhi Jayanthi</td><td class="py-3 px-4 text-slate-600">02 October 2026</td><td class="py-3 px-4 text-slate-600">October</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">Pune-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-blue-100 text-blue-700">Pune-H</span></td></tr>
+
+                        <!-- US 2026 Holidays -->
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">New Year's Day</td><td class="py-3 px-4 text-slate-600">01 January 2026</td><td class="py-3 px-4 text-slate-600">January</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-700">US-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Memorial Day</td><td class="py-3 px-4 text-slate-600">25 May 2026</td><td class="py-3 px-4 text-slate-600">May</td><td class="py-3 px-4 text-slate-600">Monday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-700">US-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Thanksgiving Day</td><td class="py-3 px-4 text-slate-600">26 November 2026</td><td class="py-3 px-4 text-slate-600">November</td><td class="py-3 px-4 text-slate-600">Thursday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-700">US-H</span></td></tr>
+                        <tr class="hover:bg-slate-50"><td class="py-3 px-4 font-medium text-slate-900">Christmas</td><td class="py-3 px-4 text-slate-600">25 December 2026</td><td class="py-3 px-4 text-slate-600">December</td><td class="py-3 px-4 text-slate-600">Friday</td><td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-700">US-H</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                <button onclick="closeHolidaysModal()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium transition">Close</button>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-</section>
 
-<section id="contact-cta">
-  <div class="container">
-    <div class="cta-panel reveal">
-      <div class="kicker" style="margin-bottom:14px;">Let's talk</div>
-      <h2>Let's build something intelligent together</h2>
-      <p>Open to architecture leadership, AI transformation, and advisory engagements across cloud, DevOps, and Agentic AI. Reach out and let's discuss how to move your platform forward.</p>
-      <div class="cta-buttons">
-        <a class="btn btn-primary" href="mailto:nidhinkn280@gmail.com">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4Z"/><path d="m22 6-10 7L2 6"/></svg>
-          Email Me
-        </a>
-        <a class="btn btn-outline" href="https://linkedin.com/in/nidhin-kumar-a6706342" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          Connect on LinkedIn
-        </a>
-        <a class="btn btn-outline" href="tel:+918606365068">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
-          Call
-        </a>
-      </div>
+    <!-- Request Leave Modal -->
+    <div id="leaveModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-slate-900 text-base" id="modalTitle">New Leave Request</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <form id="leaveForm" onsubmit="handleFormSubmit(event)" class="p-6 space-y-4">
+                <input type="hidden" id="editDocId" value="">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Team Member Name</label>
+                        <input type="text" id="userName" required placeholder="e.g. Nitin" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Office Location</label>
+                        <select id="userLocation" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="Trivandrum">Trivandrum</option>
+                            <option value="Bangalore">Bangalore</option>
+                            <option value="Kochi">Kochi</option>
+                            <option value="Chennai">Chennai</option>
+                            <option value="Pune">Pune</option>
+                            <option value="US">US</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Leave Type</label>
+                        <select id="leaveType" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="Sick Leave">Sick Leave</option>
+                            <option value="Holiday">Holiday</option>
+                            <option value="Restricted Holiday">Restricted Holiday</option>
+                            <option value="Earned Leave">Earned Leave</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Status</label>
+                        <select id="leaveStatus" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white">
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approved</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Start Date</label>
+                        <input type="date" id="startDate" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">End Date</label>
+                        <input type="date" id="endDate" required class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Coverage Assigned (Backup)</label>
+                    <input type="text" id="coverage" required placeholder="e.g. Alex Rivera" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Task Details & Handover Notes</label>
+                    <textarea id="taskDetails" rows="2" placeholder="e.g. Review client PRs and attend weekly sprint sync on Tuesday." class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+                </div>
+                <div class="pt-3 flex justify-end space-x-3">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 border border-slate-200 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-sm font-medium shadow-sm transition">Save Request</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-</section>
 
-<footer>
-  <div class="container">
-    Nidhin Kumar K N &middot; Cloud, DevOps &amp; AI Architect &middot;
-    <a href="mailto:nidhinkn280@gmail.com">nidhinkn280@gmail.com</a> &middot;
-    <a href="tel:+918606365068">+91-8606365068</a>
-  </div>
-</footer>
+    <!-- Alert Modal -->
+    <div id="alertModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div id="alertIcon" class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <h3 id="alertTitle" class="font-bold text-slate-900 text-lg">Success</h3>
+            <p id="alertMessage" class="text-sm text-slate-600">Operation completed successfully.</p>
+            <button onclick="closeAlert()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg text-sm font-medium transition">OK</button>
+        </div>
+    </div>
 
-<script>
-  // Network canvas background
-  const canvas = document.getElementById('netCanvas');
-  const ctx = canvas.getContext('2d');
-  let w, h, points;
-  const colors = ['0,229,199', '91,141,255', '162,107,255', '255,93,162', '56,199,255'];
-  function resize(){
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = Math.max(window.innerHeight, document.body.scrollHeight);
-  }
-  function initPoints(){
-    const count = Math.min(70, Math.floor((w*h)/26000));
-    points = Array.from({length: count}, () => ({
-      x: Math.random()*w, y: Math.random()*h,
-      vx: (Math.random()-0.5)*0.35, vy: (Math.random()-0.5)*0.35,
-      c: colors[Math.floor(Math.random()*colors.length)]
-    }));
-  }
-  function step(){
-    ctx.clearRect(0,0,w,h);
-    for(const p of points){
-      p.x += p.vx; p.y += p.vy;
-      if(p.x < 0 || p.x > w) p.vx *= -1;
-      if(p.y < 0 || p.y > h) p.vy *= -1;
-    }
-    for(let i=0;i<points.length;i++){
-      for(let j=i+1;j<points.length;j++){
-        const a = points[i], b = points[j];
-        const dx = a.x-b.x, dy = a.y-b.y;
-        const dist = Math.sqrt(dx*dx+dy*dy);
-        if(dist < 150){
-          ctx.strokeStyle = `rgba(${a.c},${0.12*(1-dist/150)})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 text-center space-y-4">
+            <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="confirmTitle" class="font-bold text-slate-900 text-lg">Confirm Action</h3>
+            <p id="confirmMessage" class="text-sm text-slate-600">Are you sure you want to proceed?</p>
+            <div class="flex space-x-3 pt-2">
+                <button onclick="closeConfirm()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-sm font-medium transition">Cancel</button>
+                <button id="confirmBtn" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2 rounded-lg text-sm font-medium transition">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Imports -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase configuration and variables provided by environment
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : undefined;
+
+        // Official Built-in 2026 Regional Holidays database
+        window.officialHolidays2026 = [
+            // Bangalore Holidays
+            { name: "Republic Day", date: "2026-01-26", location: "Bangalore", type: "Holiday" },
+            { name: "Ugadi (Kannada New Year)", date: "2026-03-19", location: "Bangalore", type: "Holiday" },
+            { name: "Idul Fitr (Ramzan)", date: "2026-03-20", location: "Bangalore", type: "Holiday" },
+            { name: "May Day", date: "2026-05-01", location: "Bangalore", type: "Holiday" },
+            { name: "Independence Day", date: "2026-08-15", location: "Bangalore", type: "Holiday" },
+            { name: "Ganesh Chaturthi", date: "2026-09-14", location: "Bangalore", type: "Holiday" },
+            { name: "Gandhi Jayanthi", date: "2026-10-02", location: "Bangalore", type: "Holiday" },
+            { name: "Dussehra (Mahanavami)", date: "2026-10-20", location: "Bangalore", type: "Holiday" },
+            { name: "Deepavali", date: "2026-11-08", location: "Bangalore", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "Bangalore", type: "Holiday" },
+
+            // Kochi Holidays
+            { name: "Republic Day", date: "2026-01-26", location: "Kochi", type: "Holiday" },
+            { name: "Idul Fitr (Ramzan)", date: "2026-03-20", location: "Kochi", type: "Holiday" },
+            { name: "Election leave", date: "2026-04-09", location: "Kochi", type: "Holiday" },
+            { name: "Vishu", date: "2026-04-15", location: "Kochi", type: "Holiday" },
+            { name: "May Day", date: "2026-05-01", location: "Kochi", type: "Holiday" },
+            { name: "Independence Day", date: "2026-08-15", location: "Kochi", type: "Holiday" },
+            { name: "Thiruvonam", date: "2026-08-26", location: "Kochi", type: "Holiday" },
+            { name: "Gandhi Jayanthi", date: "2026-10-02", location: "Kochi", type: "Holiday" },
+            { name: "Mahanavami", date: "2026-10-20", location: "Kochi", type: "Holiday" },
+            { name: "Deepavali", date: "2026-11-08", location: "Kochi", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "Kochi", type: "Holiday" },
+
+            // Chennai Holidays
+            { name: "Pongal", date: "2026-01-15", location: "Chennai", type: "Holiday" },
+            { name: "Republic Day", date: "2026-01-26", location: "Chennai", type: "Holiday" },
+            { name: "Idul Fitr (Ramzan)", date: "2026-03-20", location: "Chennai", type: "Holiday" },
+            { name: "Tamil New Year", date: "2026-04-14", location: "Chennai", type: "Holiday" },
+            { name: "Election leave", date: "2026-04-23", location: "Chennai", type: "Holiday" },
+            { name: "May Day", date: "2026-05-01", location: "Chennai", type: "Holiday" },
+            { name: "Independence Day", date: "2026-08-15", location: "Chennai", type: "Holiday" },
+            { name: "Gandhi Jayanthi", date: "2026-10-02", location: "Chennai", type: "Holiday" },
+            { name: "Mahanavami/Vijayadashami", date: "2026-10-20", location: "Chennai", type: "Holiday" },
+            { name: "Deepavali", date: "2026-11-08", location: "Chennai", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "Chennai", type: "Holiday" },
+
+            // Trivandrum Holidays
+            { name: "Republic Day", date: "2026-01-26", location: "Trivandrum", type: "Holiday" },
+            { name: "Good Friday", date: "2026-04-03", location: "Trivandrum", type: "Holiday" },
+            { name: "Vishu", date: "2026-04-15", location: "Trivandrum", type: "Holiday" },
+            { name: "May Day", date: "2026-05-01", location: "Trivandrum", type: "Holiday" },
+            { name: "Thiruvonam", date: "2026-08-26", location: "Trivandrum", type: "Holiday" },
+            { name: "Sree Narayana Guru Samadhi", date: "2026-09-21", location: "Trivandrum", type: "Holiday" },
+            { name: "Gandhi Jayanthi", date: "2026-10-02", location: "Trivandrum", type: "Holiday" },
+            { name: "Dussehra (Mahanavami)", date: "2026-10-20", location: "Trivandrum", type: "Holiday" },
+            { name: "Deepavali", date: "2026-11-08", location: "Trivandrum", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "Trivandrum", type: "Holiday" },
+
+            // Pune Holidays
+            { name: "Republic Day", date: "2026-01-26", location: "Pune", type: "Holiday" },
+            { name: "Ganesh Chaturthi", date: "2026-09-14", location: "Pune", type: "Holiday" },
+            { name: "Gandhi Jayanthi", date: "2026-10-02", location: "Pune", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "Pune", type: "Holiday" },
+
+            // US Holidays
+            { name: "New Year's Day", date: "2026-01-01", location: "US", type: "Holiday" },
+            { name: "Memorial Day", date: "2026-05-25", location: "US", type: "Holiday" },
+            { name: "Thanksgiving Day", date: "2026-11-26", location: "US", type: "Holiday" },
+            { name: "Christmas", date: "2026-12-25", location: "US", type: "Holiday" }
+        ];
+
+        let app, db, auth;
+        window.leaves = [];
+        let pendingDeleteId = null;
+        window.currentCalendarYear = 2026;
+        window.currentCalendarMonth = 8; // September (0-indexed)
+
+        async function initFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+
+                    const statusEl = document.getElementById('syncStatus');
+                    statusEl.className = 'text-xs font-normal bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full ml-2';
+                    statusEl.innerHTML = '<i class="fa-solid fa-cloud-arrow-up mr-1"></i>Cloud Live Sync';
+
+                    setupRealtimeListener();
+                } else {
+                    fallbackToLocalStorage();
+                }
+            } catch (err) {
+                console.error("Firebase init error:", err);
+                fallbackToLocalStorage();
+            }
         }
-      }
-    }
-    for(const p of points){
-      ctx.fillStyle = `rgba(${p.c},0.7)`;
-      ctx.beginPath(); ctx.arc(p.x,p.y,1.6,0,Math.PI*2); ctx.fill();
-    }
-    requestAnimationFrame(step);
-  }
-  resize(); initPoints(); step();
-  window.addEventListener('resize', () => { resize(); initPoints(); });
 
-  // Scroll progress bar
-  const progressBar = document.getElementById('progressBar');
-  window.addEventListener('scroll', () => {
-    const doc = document.documentElement;
-    const scrolled = (doc.scrollTop) / (doc.scrollHeight - doc.clientHeight) * 100;
-    progressBar.style.width = scrolled + '%';
-  });
+        function fallbackToLocalStorage() {
+            const statusEl = document.getElementById('syncStatus');
+            statusEl.className = 'text-xs font-normal bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full ml-2';
+            statusEl.innerHTML = '<i class="fa-solid fa-database mr-1"></i>Local Storage Mode';
 
-  // Typing effect
-  const roles = [
-    'Cloud, DevOps & AI Architect',
-    'Technical Manager',
-    'Agentic AI & RAG Systems Lead',
-    'Enterprise Cloud Strategist'
-  ];
-  const typedEl = document.getElementById('typedRole');
-  let ri = 0, ci = 0, deleting = false;
-  function typeLoop(){
-    const current = roles[ri];
-    if(!deleting){
-      ci++; typedEl.textContent = current.slice(0, ci);
-      if(ci === current.length){ deleting = true; setTimeout(typeLoop, 1500); return; }
-    } else {
-      ci--; typedEl.textContent = current.slice(0, ci);
-      if(ci === 0){ deleting = false; ri = (ri+1) % roles.length; }
-    }
-    setTimeout(typeLoop, deleting ? 35 : 60);
-  }
-  typeLoop();
+            window.leaves = JSON.parse(localStorage.getItem('team_leaves_data')) || [
+                { id: '1', name: "Sarah Jenkins", location: "Bangalore", type: "Earned Leave", start: "2026-10-10", end: "2026-10-14", coverage: "Alex Rivera", taskDetails: "Handle Q4 marketing asset deployment & client escalations.", status: "Approved" },
+                { id: '2', name: "David Kim", location: "Trivandrum", type: "Restricted Holiday", start: "2026-10-02", end: "2026-10-02", coverage: "Jessica Taylor", taskDetails: "Gandhi Jayanthi holiday observance.", status: "Approved" },
+                { id: '3', name: "Emily Watson", location: "Pune", type: "Sick Leave", start: "2026-08-28", end: "2026-08-28", coverage: "Marcus Vance", taskDetails: "Medical leave and health handover notes.", status: "Approved" },
+                { id: '4', name: "Nitin", location: "Bangalore", type: "Earned Leave", start: "2026-09-15", end: "2026-09-18", coverage: "Rohit Sharma", taskDetails: "Sprint planning and quarterly code freeze handover.", status: "Approved" }
+            ];
+            renderAll();
+        }
 
-  // Reveal on scroll
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); } });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+        function setupRealtimeListener() {
+            const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'team_leaves');
+            
+            onSnapshot(colRef, (snapshot) => {
+                const fetched = [];
+                snapshot.forEach(docSnap => {
+                    fetched.push({ id: docSnap.id, ...docSnap.data() });
+                });
 
-  // Ring progress (hero stats)
-  const ringIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const circle = entry.target;
-        const pct = parseFloat(circle.getAttribute('data-percent'));
-        const c = 2 * Math.PI * 45;
-        circle.style.strokeDashoffset = c - (pct/100)*c;
-        ringIO.unobserve(circle);
-      }
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('.ring-fg').forEach(el => ringIO.observe(el));
+                if (fetched.length === 0) {
+                    const defaults = [
+                        { name: "Sarah Jenkins", location: "Bangalore", type: "Earned Leave", start: "2026-10-10", end: "2026-10-14", coverage: "Alex Rivera", taskDetails: "Handle Q4 marketing asset deployment & client escalations.", status: "Approved" },
+                        { name: "David Kim", location: "Trivandrum", type: "Restricted Holiday", start: "2026-10-02", end: "2026-10-02", coverage: "Jessica Taylor", taskDetails: "Gandhi Jayanthi holiday observance.", status: "Approved" },
+                        { name: "Emily Watson", location: "Pune", type: "Sick Leave", start: "2026-08-28", end: "2026-08-28", coverage: "Marcus Vance", taskDetails: "Medical leave and health handover notes.", status: "Approved" },
+                        { name: "Nitin", location: "Bangalore", type: "Earned Leave", start: "2026-09-15", end: "2026-09-18", coverage: "Rohit Sharma", taskDetails: "Sprint planning and quarterly code freeze handover.", status: "Approved" }
+                    ];
+                    defaults.forEach(d => addDoc(colRef, d));
+                } else {
+                    window.leaves = fetched;
+                    renderAll();
+                }
+            }, (error) => {
+                console.error("Firestore error:", error);
+                fallbackToLocalStorage();
+            });
+        }
 
-  // Language proficiency rings
-  const langIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const circle = entry.target;
-        const pct = parseFloat(circle.getAttribute('data-percent'));
-        const c = 2 * Math.PI * 27;
-        circle.style.strokeDashoffset = c - (pct/100)*c;
-        langIO.unobserve(circle);
-      }
-    });
-  }, { threshold: 0.4 });
-  document.querySelectorAll('.lang-fg').forEach(el => langIO.observe(el));
+        window.saveLeaveToCloud = async function(leaveData, docId = null) {
+            if (db && auth && auth.currentUser) {
+                try {
+                    const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'team_leaves');
+                    if (docId) {
+                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'team_leaves', docId);
+                        await updateDoc(docRef, leaveData);
+                    } else {
+                        await addDoc(colRef, leaveData);
+                    }
+                    return true;
+                } catch (e) {
+                    console.error("Error saving to cloud:", e);
+                    return false;
+                }
+            } else {
+                if (docId) {
+                    const idx = window.leaves.findIndex(l => l.id === docId);
+                    if (idx !== -1) window.leaves[idx] = { id: docId, ...leaveData };
+                } else {
+                    const newId = Date.now().toString();
+                    window.leaves.push({ id: newId, ...leaveData });
+                }
+                localStorage.setItem('team_leaves_data', JSON.stringify(window.leaves));
+                renderAll();
+                return true;
+            }
+        };
 
-  // Bar / tenure fills
-  const barIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        const el = entry.target;
-        el.style.width = el.getAttribute('data-w') + '%';
-        barIO.unobserve(el);
-      }
-    });
-  }, { threshold: 0.3 });
-  document.querySelectorAll('.bar-fill, .tenure-fill').forEach(el => barIO.observe(el));
+        window.deleteLeaveFromCloud = async function(docId) {
+            if (db && auth && auth.currentUser) {
+                try {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'team_leaves', docId);
+                    await deleteDoc(docRef);
+                    return true;
+                } catch (e) {
+                    console.error("Error deleting from cloud:", e);
+                    return false;
+                }
+            } else {
+                window.leaves = window.leaves.filter(l => l.id !== docId);
+                localStorage.setItem('team_leaves_data', JSON.stringify(window.leaves));
+                renderAll();
+                return true;
+            }
+        };
 
-  // Mouse-tracked spotlight glow on cards
-  document.querySelectorAll('.comp-card, .highlight-card, .tl-card, .info-card, .panel').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--sx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--sy', (e.clientY - r.top) + 'px');
-    });
-  });
+        window.renderAll = function() {
+            renderLeaves();
+            renderCalendarGrid();
+            renderAnalyticsHeatmap();
+        }
 
-  // Active nav link on scroll
-  const navlinks = document.querySelectorAll('.navlink');
-  const navIO = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      const id = entry.target.getAttribute('id');
-      if(!id) return;
-      const link = document.querySelector('.navlink[href="#' + id + '"]');
-      if(entry.isIntersecting && link){
-        navlinks.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
-      }
-    });
-  }, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
-  document.querySelectorAll('section[id]').forEach(s => navIO.observe(s));
-</script>
+        initFirebase();
+    </script>
 
+    <script>
+        // Helper function to check if a leave date overlaps with any official public holiday for that location
+        function getOverlappingHoliday(location, startDateStr, endDateStr) {
+            if (!window.officialHolidays2026) return null;
+            return window.officialHolidays2026.find(h => {
+                return h.location === location && h.date >= startDateStr && h.date <= endDateStr;
+            });
+        }
+
+        // Switch between Views
+        function switchView(view) {
+            document.getElementById('tableViewContainer').classList.add('hidden');
+            document.getElementById('calendarViewContainer').classList.add('hidden');
+            document.getElementById('analyticsViewContainer').classList.add('hidden');
+
+            document.getElementById('btn-view-table').className = 'px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
+            document.getElementById('btn-view-calendar').className = 'px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
+            document.getElementById('btn-view-analytics').className = 'px-4 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition';
+
+            if (view === 'table') {
+                document.getElementById('tableViewContainer').classList.remove('hidden');
+                document.getElementById('btn-view-table').className = 'px-4 py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition font-medium';
+            } else if (view === 'calendar') {
+                document.getElementById('calendarViewContainer').classList.remove('hidden');
+                document.getElementById('btn-view-calendar').className = 'px-4 py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition font-medium';
+                renderCalendarGrid();
+            } else if (view === 'analytics') {
+                document.getElementById('analyticsViewContainer').classList.remove('hidden');
+                document.getElementById('btn-view-analytics').className = 'px-4 py-1.5 rounded-lg bg-white text-indigo-600 shadow-sm transition font-medium';
+                renderAnalyticsHeatmap();
+            }
+        }
+
+        // Render Calendar Grid
+        function renderCalendarGrid() {
+            const container = document.getElementById('calendarGridDays');
+            container.innerHTML = '';
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            document.getElementById('calendarMonthTitle').innerText = `${monthNames[window.currentCalendarMonth]} ${window.currentCalendarYear}`;
+
+            const firstDayIndex = new Date(window.currentCalendarYear, window.currentCalendarMonth, 1).getDay();
+            const totalDays = new Date(window.currentCalendarYear, window.currentCalendarMonth + 1, 0).getDate();
+
+            for (let i = 0; i < firstDayIndex; i++) {
+                const blank = document.createElement('div');
+                blank.className = 'h-24 bg-slate-50 rounded-xl border border-dashed border-slate-200 opacity-40';
+                container.appendChild(blank);
+            }
+
+            for (let day = 1; day <= totalDays; day++) {
+                const dateStr = `${window.currentCalendarYear}-${String(window.currentCalendarMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                const dayLeaves = window.leaves.filter(l => {
+                    return dateStr >= l.start && dateStr <= l.end;
+                });
+
+                const dayHolidays = window.officialHolidays2026.filter(h => h.date === dateStr);
+
+                const cell = document.createElement('div');
+                cell.className = 'h-32 bg-white rounded-xl border border-slate-200 p-2 overflow-y-auto flex flex-col justify-between hover:border-indigo-300 transition shadow-xs';
+                
+                let badgesHtml = '';
+                
+                dayHolidays.forEach(h => {
+                    let locColor = 'bg-indigo-100 text-indigo-800';
+                    if (h.location === 'Kochi') locColor = 'bg-emerald-100 text-emerald-800';
+                    if (h.location === 'Chennai') locColor = 'bg-amber-100 text-amber-800';
+                    if (h.location === 'Trivandrum') locColor = 'bg-teal-100 text-teal-800';
+                    if (h.location === 'Pune') locColor = 'bg-blue-100 text-blue-800';
+                    if (h.location === 'US') locColor = 'bg-purple-100 text-purple-800';
+
+                    badgesHtml += `<div class="text-[10px] px-1.5 py-0.5 rounded font-bold truncate ${locColor} border border-indigo-200" title="Holiday (${h.location}): ${h.name}"><i class="fa-solid fa-flag mr-1"></i>[${h.location}] ${h.name}</div>`;
+                });
+
+                dayLeaves.forEach(l => {
+                    let badgeColor = 'bg-indigo-100 text-indigo-800';
+                    if (l.type === 'Sick Leave') badgeColor = 'bg-rose-100 text-rose-800';
+                    if (l.type === 'Restricted Holiday') badgeColor = 'bg-amber-100 text-amber-800';
+                    if (l.type === 'Earned Leave') badgeColor = 'bg-emerald-100 text-emerald-800';
+                    badgesHtml += `<div class="text-[10px] px-1.5 py-0.5 rounded font-medium truncate ${badgeColor}" title="${l.name} (${l.type})">${l.name}</div>`;
+                });
+
+                const totalItemsCount = dayLeaves.length + dayHolidays.length;
+
+                cell.innerHTML = `
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+                        <span>${day}</span>
+                        ${totalItemsCount > 0 ? `<span class="w-2 h-2 rounded-full bg-indigo-600"></span>` : ''}
+                    </div>
+                    <div class="space-y-1 mt-1 flex-1 overflow-y-auto">
+                        ${badgesHtml}
+                    </div>
+                `;
+                container.appendChild(cell);
+            }
+        }
+
+        function changeCalendarMonth(direction) {
+            window.currentCalendarMonth += direction;
+            if (window.currentCalendarMonth > 11) {
+                window.currentCalendarMonth = 0;
+                window.currentCalendarYear++;
+            } else if (window.currentCalendarMonth < 0) {
+                window.currentCalendarMonth = 11;
+                window.currentCalendarYear--;
+            }
+            renderCalendarGrid();
+        }
+
+        // Render Analytics Heatmap
+        function renderAnalyticsHeatmap() {
+            const container = document.getElementById('analyticsBars');
+            container.innerHTML = '';
+
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            months.forEach((mName, mIdx) => {
+                const monthLeaves = window.leaves.filter(l => {
+                    const st = new Date(l.start);
+                    return st.getMonth() === mIdx;
+                });
+
+                const count = monthLeaves.length;
+                const percentage = Math.min(100, (count / 10) * 100);
+
+                const row = document.createElement('div');
+                row.className = 'space-y-1';
+                row.innerHTML = `
+                    <div class="flex justify-between text-xs font-semibold text-slate-600">
+                        <span>${mName} 2026</span>
+                        <span>${count} Leave Request(s)</span>
+                    </div>
+                    <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                        <div class="bg-indigo-600 h-3 rounded-full transition-all duration-500" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // Render Leaves Table and Stats
+        function renderLeaves() {
+            const tbody = document.getElementById('leaveTableBody');
+            const emptyState = document.getElementById('emptyState');
+            tbody.innerHTML = '';
+
+            const filterLocation = document.getElementById('filterLocation').value;
+            const filterMonth = document.getElementById('filterMonth').value;
+            const filterYear = document.getElementById('filterYear').value;
+            const filterType = document.getElementById('filterType').value;
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+
+            let filtered = window.leaves.filter(leave => {
+                const startDate = new Date(leave.start);
+                const loc = leave.location || 'Trivandrum';
+                const matchLocation = filterLocation === 'ALL' || loc === filterLocation;
+                const matchMonth = filterMonth === 'ALL' || startDate.getMonth() == parseInt(filterMonth);
+                const matchYear = filterYear === 'ALL' || startDate.getFullYear() == parseInt(filterYear);
+                const matchType = filterType === 'ALL' || leave.type === filterType;
+                const matchSearch = leave.name.toLowerCase().includes(searchInput) || leave.coverage.toLowerCase().includes(searchInput) || leave.taskDetails.toLowerCase().includes(searchInput);
+                return matchLocation && matchMonth && matchYear && matchType && matchSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            let totalDaysCount = 0;
+            let pendingCount = 0;
+            let approvedDaysCount = 0;
+
+            filtered.forEach((leave) => {
+                const start = new Date(leave.start);
+                const end = new Date(leave.end);
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                if (leave.status === 'Approved') {
+                    approvedDaysCount += diffDays;
+                } else {
+                    pendingCount++;
+                }
+                totalDaysCount++;
+
+                const monthName = start.toLocaleString('default', { month: 'short' });
+                const yearName = start.getFullYear();
+                const loc = leave.location || 'Trivandrum';
+
+                // Check if leave clashes with public holiday
+                const holidayMatch = getOverlappingHoliday(loc, leave.start, leave.end);
+
+                let locBadgeClass = 'bg-teal-100 text-teal-800';
+                if (loc === 'Bangalore') locBadgeClass = 'bg-indigo-100 text-indigo-800';
+                if (loc === 'Kochi') locBadgeClass = 'bg-emerald-100 text-emerald-800';
+                if (loc === 'Chennai') locBadgeClass = 'bg-amber-100 text-amber-800';
+                if (loc === 'Pune') locBadgeClass = 'bg-blue-100 text-blue-800';
+                if (loc === 'US') locBadgeClass = 'bg-purple-100 text-purple-800';
+
+                let badgeClass = 'bg-slate-100 text-slate-700';
+                if (leave.type === 'Sick Leave') badgeClass = 'bg-rose-100 text-rose-700';
+                if (leave.type === 'Holiday') badgeClass = 'bg-indigo-100 text-indigo-700';
+                if (leave.type === 'Restricted Holiday') badgeClass = 'bg-amber-100 text-amber-700';
+                if (leave.type === 'Earned Leave') badgeClass = 'bg-emerald-100 text-emerald-700';
+
+                let statusBadge = leave.status === 'Approved' 
+                    ? '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">Approved</span>'
+                    : '<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">Pending</span>';
+
+                let holidayWarningBadge = holidayMatch 
+                    ? `<div class="mt-1"><span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300" title="Conflicts with Public Holiday: ${holidayMatch.name}"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Public Holiday: ${holidayMatch.name}</span></div>`
+                    : '';
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50 transition border-b border-slate-100';
+                tr.innerHTML = `
+                    <td class="py-3 px-6 font-medium text-slate-900">${leave.name}</td>
+                    <td class="py-3 px-6"><span class="px-2.5 py-1 rounded-full text-xs font-semibold ${locBadgeClass}"><i class="fa-solid fa-location-dot mr-1"></i>${loc}</span></td>
+                    <td class="py-3 px-6">
+                        <span class="px-2.5 py-1 rounded-lg text-xs font-semibold ${badgeClass}">${leave.type}</span>
+                        ${holidayWarningBadge}
+                    </td>
+                    <td class="py-3 px-6 text-slate-600 font-medium">${monthName} ${yearName}</td>
+                    <td class="py-3 px-6 text-slate-600">${leave.start}</td>
+                    <td class="py-3 px-6 text-slate-600">${leave.end}</td>
+                    <td class="py-3 px-6 text-slate-600 font-semibold">${diffDays} day(s)</td>
+                    <td class="py-3 px-6 text-slate-600"><span class="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded text-xs font-medium"><i class="fa-solid fa-user-shield mr-1"></i>${leave.coverage}</span></td>
+                    <td class="py-3 px-6 text-slate-600 text-xs max-w-xs truncate" title="${leave.taskDetails}">${leave.taskDetails || 'None'}</td>
+                    <td class="py-3 px-6">${statusBadge}</td>
+                    <td class="py-3 px-6 text-right space-x-2">
+                        <button onclick="editLeave('${leave.id}')" class="text-slate-400 hover:text-indigo-600 transition p-1" title="Edit Request">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="confirmDeleteLeave('${leave.id}')" class="text-slate-400 hover:text-rose-600 transition p-1" title="Delete Request">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('stat-total').innerText = window.leaves.length;
+            document.getElementById('stat-pending').innerText = window.leaves.filter(l => l.status === 'Pending').length;
+            document.getElementById('stat-days').innerText = approvedDaysCount;
+            document.getElementById('stat-coverage').innerText = window.leaves.length > 0 ? Math.round((window.leaves.filter(l => l.coverage).length / window.leaves.length) * 100) + '%' : '0%';
+        }
+
+        function filterLeaves() {
+            renderLeaves();
+        }
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById('modalTitle').innerText = 'New Leave Request';
+            document.getElementById('leaveForm').reset();
+            const editDocEl = document.getElementById('editDocId');
+            if (editDocEl) editDocEl.value = '';
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = todayStr > '2026-12-31' || todayStr < '2026-01-01' ? '2026-09-15' : todayStr;
+            document.getElementById('endDate').value = todayStr > '2026-12-31' || todayStr < '2026-01-01' ? '2026-09-17' : todayStr;
+
+            document.getElementById('leaveModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('leaveModal').classList.add('hidden');
+        }
+
+        function openHolidaysModal() {
+            document.getElementById('holidaysModal').classList.remove('hidden');
+        }
+
+        function closeHolidaysModal() {
+            document.getElementById('holidaysModal').classList.add('hidden');
+        }
+
+        // Handle Form Submit (Add or Edit)
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            const editDocIdEl = document.getElementById('editDocId');
+            const editDocId = editDocIdEl ? editDocIdEl.value : '';
+            const name = document.getElementById('userName').value;
+            const location = document.getElementById('userLocation').value;
+            const type = document.getElementById('leaveType').value;
+            const status = document.getElementById('leaveStatus').value;
+            const start = document.getElementById('startDate').value;
+            const end = document.getElementById('endDate').value;
+            const coverage = document.getElementById('coverage').value;
+            const taskDetails = document.getElementById('taskDetails').value;
+
+            if (new Date(start) > new Date(end)) {
+                showAlert('Error', 'Start date cannot be after end date.', 'error');
+                return;
+            }
+
+            // Check if the selected date range conflicts with a public holiday for the chosen office location
+            const conflictingHoliday = getOverlappingHoliday(location, start, end);
+            if (conflictingHoliday) {
+                showAlert('Public Holiday Conflict', `Cannot apply for leave on ${conflictingHoliday.date}. It is an official public holiday (${conflictingHoliday.name}) for the ${location} office location.`, 'error');
+                return;
+            }
+
+            const leaveData = { name, location, type, status, start, end, coverage, taskDetails };
+
+            const success = await window.saveLeaveToCloud(leaveData, editDocId ? editDocId : null);
+            if (success) {
+                showAlert('Success', editDocId ? 'Leave request updated successfully.' : 'Leave request submitted successfully.');
+            } else {
+                showAlert('Error', 'Failed to save to cloud database.', 'error');
+            }
+
+            closeModal();
+        }
+
+        // Edit Leave
+        function editLeave(id) {
+            const leave = window.leaves.find(l => l.id === id);
+            if (!leave) return;
+            document.getElementById('modalTitle').innerText = 'Edit Leave Request';
+            const editDocEl = document.getElementById('editDocId');
+            if (editDocEl) editDocEl.value = leave.id;
+            document.getElementById('userName').value = leave.name;
+            document.getElementById('userLocation').value = leave.location || 'Trivandrum';
+            document.getElementById('leaveType').value = leave.type;
+            document.getElementById('leaveStatus').value = leave.status;
+            document.getElementById('startDate').value = leave.start;
+            document.getElementById('endDate').value = leave.end;
+            document.getElementById('coverage').value = leave.coverage;
+            document.getElementById('taskDetails').value = leave.taskDetails;
+            document.getElementById('leaveModal').classList.remove('hidden');
+        }
+
+        // Confirm Delete Individual Leave
+        function confirmDeleteLeave(id) {
+            pendingDeleteId = id;
+            document.getElementById('confirmTitle').innerText = 'Delete Leave Request';
+            document.getElementById('confirmMessage').innerText = 'Are you sure you want to delete this leave request?';
+            document.getElementById('confirmBtn').onclick = async function() {
+                await window.deleteLeaveFromCloud(pendingDeleteId);
+                closeConfirm();
+                showAlert('Deleted', 'Leave request has been removed.', 'success');
+            };
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            pendingDeleteId = null;
+        }
+
+        function showAlert(title, message, type = 'success') {
+            document.getElementById('alertTitle').innerText = title;
+            document.getElementById('alertMessage').innerText = message;
+            const iconEl = document.getElementById('alertIcon');
+            if (type === 'error') {
+                iconEl.className = 'w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto text-xl';
+                iconEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                iconEl.className = 'w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto text-xl';
+                iconEl.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
+            document.getElementById('alertModal').classList.remove('hidden');
+        }
+
+        function closeAlert() {
+            document.getElementById('alertModal').classList.add('hidden');
+        }
+
+        // Export to Excel/CSV Report with Public Holiday Citing
+        function exportToExcel() {
+            let allExportRows = [];
+
+            window.leaves.forEach(leave => {
+                const start = new Date(leave.start);
+                const end = new Date(leave.end);
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+                // Check if this leave overlaps with a public holiday for the location
+                const holidayMatch = getOverlappingHoliday(leave.location || 'Trivandrum', leave.start, leave.end);
+                let notes = leave.taskDetails || 'None';
+                let holidayCitation = 'No Conflict';
+
+                if (holidayMatch) {
+                    holidayCitation = `Public Holiday: ${holidayMatch.name} (${holidayMatch.date})`;
+                    notes = `[Note: Overlaps with ${holidayMatch.location} public holiday - ${holidayMatch.name}] ${notes}`;
+                }
+
+                allExportRows.push({
+                    name: leave.name,
+                    location: leave.location || 'Trivandrum',
+                    type: leave.type,
+                    start: leave.start,
+                    end: leave.end,
+                    duration: diffDays + ' day(s)',
+                    coverage: leave.coverage,
+                    publicHolidayCitation: holidayCitation,
+                    taskDetails: notes,
+                    status: leave.status
+                });
+            });
+
+            // Include all official regional public holidays
+            if (window.officialHolidays2026 && window.officialHolidays2026.length > 0) {
+                window.officialHolidays2026.forEach(h => {
+                    allExportRows.push({
+                        name: `[Public Holiday] ${h.name}`,
+                        location: h.location,
+                        type: h.type,
+                        start: h.date,
+                        end: h.date,
+                        duration: '1 day(s)',
+                        coverage: 'N/A (Office Closed)',
+                        publicHolidayCitation: `Official Holiday: ${h.name}`,
+                        taskDetails: `Official regional holiday for ${h.location} location.`,
+                        status: 'Approved'
+                    });
+                });
+            }
+
+            if (allExportRows.length === 0) {
+                showAlert('No Data', 'There are no leave or holiday records to export.', 'error');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Team Member / Event,Office Location,Leave Type,Start Date,End Date,Duration,Coverage Backup,Public Holiday Citation,Task Details & Notes,Status\r\n";
+
+            allExportRows.forEach(item => {
+                const row = [
+                    `"${item.name}"`,
+                    `"${item.location}"`,
+                    `"${item.type}"`,
+                    `"${item.start}"`,
+                    `"${item.end}"`,
+                    `"${item.duration}"`,
+                    `"${item.coverage}"`,
+                    `"${item.publicHolidayCitation}"`,
+                    `"${(item.taskDetails || '').replace(/"/g, '""')}"`,
+                    `"${item.status}"`
+                ];
+                csvContent += row.join(",") + "\r\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Team_Leave_and_Holiday_Master_Report_2026.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showAlert('Export Complete', 'Master Excel/CSV report including public holiday conflict citations has been downloaded successfully.');
+        }
+    </script>
 </body>
 </html>
